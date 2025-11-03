@@ -1,0 +1,25 @@
+"""
+URL configuration for stories app
+"""
+from django.urls import path
+from . import views
+
+app_name = 'stories'
+
+urlpatterns = [
+    # Homepage and collaborative stories
+    path('', views.homepage, name='homepage'),
+    path('create-story/', views.create_story_pitch, name='create_story_pitch'),
+    path('story/<slug:slug>/', views.story_detail, name='story_detail'),
+    path('story/<slug:slug>/chapter/<int:chapter_number>/', views.chapter_detail, name='chapter_detail'),
+    path('story/<slug:slug>/chapter/<int:chapter_number>/comment/', views.add_comment, name='add_comment'),
+    path('story/<slug:slug>/submit-prompt/', views.submit_prompt, name='submit_prompt'),
+    path('story/<slug:slug>/subscribe/', views.subscribe_story, name='subscribe_story'),
+    path('story/<slug:slug>/upvote/', views.upvote_story, name='upvote_story'),
+    path('prompt/<int:prompt_id>/vote/', views.vote_prompt, name='vote_prompt'),
+
+    # Personal stories
+    path('my-stories/', views.my_stories, name='my_stories'),
+    path('create-personal-story/', views.create_personal_story, name='create_personal_story'),
+    path('personal/<slug:slug>/continue/', views.continue_personal_story, name='continue_personal_story'),
+]

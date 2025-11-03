@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Personal Story - PlotVote{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <a href="{% url 'stories:my_stories' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-4 inline-block">
+        ← Back to My Stories
+    </a>
+
+    <div class="bg-white rounded-lg shadow-sm p-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Personal Story</h1>
+        <p class="text-gray-600 mb-8">Start a new story that you can write chapter by chapter using AI</p>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+
+            <div>
+                <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                    Story Title *
+                </label>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    required
+                    maxlength="200"
+                    placeholder="The Quest for the Lost Kingdom"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+            </div>
+
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                    Story Premise * (min 50 characters)
+                </label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    required
+                    minlength="50"
+                    placeholder="Describe the world, main characters, and initial setup for your story..."
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                ></textarea>
+                <p class="text-sm text-gray-500 mt-1">
+                    This will guide the AI in generating your story chapters
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="genre" class="block text-sm font-medium text-gray-700 mb-2">
+                        Genre
+                    </label>
+                    <select
+                        id="genre"
+                        name="genre"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    >
+                        {% for value, label in genre_choices %}
+                            <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="language" class="block text-sm font-medium text-gray-700 mb-2">
+                        Language
+                    </label>
+                    <select
+                        id="language"
+                        name="language"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                    >
+                        {% for value, label in language_choices %}
+                            <option value="{{ value }}" {% if value == 'en' %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                <h3 class="font-semibold text-indigo-900 mb-2">About Personal Stories</h3>
+                <ul class="text-sm text-indigo-800 space-y-1">
+                    <li>• Your stories are private - only you can see and edit them</li>
+                    <li>• Write prompts for each chapter and let AI generate the content</li>
+                    <li>• AI considers your story premise and previous chapters for consistency</li>
+                    <li>• Edit and refine as you go to create your perfect story</li>
+                </ul>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit" class="flex-1 bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition">
+                    Create Story
+                </button>
+                <a href="{% url 'stories:my_stories' %}" class="px-6 py-3 text-gray-700 font-semibold hover:text-gray-900 transition">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
