@@ -1,6 +1,6 @@
 [Unit]
 Description=PlotVote Celery Beat (Scheduler)
-After=network.target redis.service
+After=network.target redis7.service
 
 [Service]
 Type=simple

@@ -31,9 +31,10 @@ sudo systemctl start mariadb
 sudo systemctl enable mariadb
 
 echo -e "${YELLOW}📦 Installing Redis...${NC}"
-sudo yum install redis -y
-sudo systemctl start redis
-sudo systemctl enable redis
+# Install Redis 7 (available in Amazon Linux 2023)
+sudo yum install redis7 -y
+sudo systemctl start redis7
+sudo systemctl enable redis7
 
 echo -e "${YELLOW}📁 Creating project directory...${NC}"
 cd /home/ec2-user
