@@ -22,12 +22,13 @@ sudo yum update -y
 
 echo -e "${YELLOW}🐍 Installing Python 3.11 and development tools...${NC}"
 sudo yum install python3.11 python3.11-pip python3.11-devel -y
-sudo yum install git gcc mysql-devel nginx -y
+sudo yum install git gcc nginx -y
 
-echo -e "${YELLOW}🗄️  Installing and configuring MySQL...${NC}"
-sudo yum install mysql-server -y
-sudo systemctl start mysqld
-sudo systemctl enable mysqld
+echo -e "${YELLOW}🗄️  Installing and configuring MySQL (MariaDB)...${NC}"
+# Install MariaDB (MySQL-compatible) and development libraries
+sudo yum install mariadb105-server mariadb105-devel -y
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
 
 echo -e "${YELLOW}📦 Installing Redis...${NC}"
 sudo yum install redis -y
@@ -53,12 +54,8 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 echo -e "${YELLOW}🗄️  Setting up MySQL database...${NC}"
-# Set temporary root password if needed
-MYSQL_ROOT_PASS="temp_root_pass_$(date +%s)"
-
-# Secure MySQL and create database
-sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASS}';" 2>/dev/null || true
-sudo mysql -u root -p"${MYSQL_ROOT_PASS}" << EOF || sudo mysql << EOF
+# Create database and user (MariaDB doesn't require root password by default for sudo)
+sudo mysql << EOF
 CREATE DATABASE IF NOT EXISTS plotvote CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER IF NOT EXISTS 'plotvote'@'localhost' IDENTIFIED BY 'change_this_password';
 GRANT ALL PRIVILEGES ON plotvote.* TO 'plotvote'@'localhost';
