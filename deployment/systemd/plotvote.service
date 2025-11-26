@@ -1,0 +1,24 @@
+[Unit]
+Description=PlotVote Gunicorn daemon
+After=network.target
+
+[Service]
+Type=notify
+User=ec2-user
+Group=ec2-user
+RuntimeDirectory=gunicorn
+WorkingDirectory=/home/ec2-user/plotvote
+Environment="PATH=/home/ec2-user/plotvote/venv/bin"
+EnvironmentFile=/home/ec2-user/plotvote/.env
+ExecStart=/home/ec2-user/plotvote/venv/bin/gunicorn \
+          --config /home/ec2-user/plotvote/deployment/gunicorn_config.py \
+          plotvote.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

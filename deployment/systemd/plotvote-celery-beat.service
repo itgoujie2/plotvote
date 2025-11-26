@@ -1,0 +1,20 @@
+[Unit]
+Description=PlotVote Celery Beat (Scheduler)
+After=network.target redis.service
+
+[Service]
+Type=simple
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/plotvote
+Environment="PATH=/home/ec2-user/plotvote/venv/bin"
+EnvironmentFile=/home/ec2-user/plotvote/.env
+ExecStart=/home/ec2-user/plotvote/venv/bin/celery -A plotvote beat \
+          --loglevel=info \
+          --logfile=/var/log/celery/beat.log \
+          --pidfile=/var/run/celery/beat.pid
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target

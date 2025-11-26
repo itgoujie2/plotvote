@@ -1,0 +1,22 @@
+[Unit]
+Description=PlotVote Celery Worker
+After=network.target redis.service
+
+[Service]
+Type=forking
+User=ec2-user
+Group=ec2-user
+WorkingDirectory=/home/ec2-user/plotvote
+Environment="PATH=/home/ec2-user/plotvote/venv/bin"
+EnvironmentFile=/home/ec2-user/plotvote/.env
+ExecStart=/home/ec2-user/plotvote/venv/bin/celery -A plotvote worker \
+          --loglevel=info \
+          --logfile=/var/log/celery/worker.log \
+          --pidfile=/var/run/celery/worker.pid
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=multi-user.target
