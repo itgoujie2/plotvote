@@ -1,6 +1,6 @@
 [Unit]
 Description=PlotVote Celery Worker
-After=network.target redis7.service
+After=network.target redis6.service
 
 [Service]
 Type=forking

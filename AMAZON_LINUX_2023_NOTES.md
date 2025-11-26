@@ -8,7 +8,7 @@ Amazon Linux 2023 has different package names compared to Amazon Linux 2. Here a
 |-----------|-------------------|----------------------|
 | MySQL Development | mysql-devel | mariadb105-devel |
 | MySQL Server | mysql-server | mariadb105-server |
-| Redis | redis | redis7 |
+| Redis | redis | redis6 |
 | Python 3.11 | python3 | python3.11 |
 
 ## Service Names
@@ -16,7 +16,7 @@ Amazon Linux 2023 has different package names compared to Amazon Linux 2. Here a
 | Service | Old Name | New Name |
 |---------|----------|----------|
 | MySQL | mysqld | mariadb |
-| Redis | redis | redis7 |
+| Redis | redis | redis6 |
 
 ## Manual Installation Commands
 
@@ -29,9 +29,9 @@ sudo systemctl start mariadb
 sudo systemctl enable mariadb
 
 # Redis
-sudo yum install redis7 -y
-sudo systemctl start redis7
-sudo systemctl enable redis7
+sudo yum install redis6 -y
+sudo systemctl start redis6
+sudo systemctl enable redis6
 
 # Python 3.11
 sudo yum install python3.11 python3.11-pip python3.11-devel -y
@@ -49,7 +49,7 @@ sudo systemctl enable nginx
 sudo systemctl status mariadb
 
 # Check Redis
-sudo systemctl status redis7
+sudo systemctl status redis6
 
 # Check Nginx
 sudo systemctl status nginx

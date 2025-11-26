@@ -31,10 +31,23 @@ sudo systemctl start mariadb
 sudo systemctl enable mariadb
 
 echo -e "${YELLOW}📦 Installing Redis...${NC}"
-# Install Redis 7 (available in Amazon Linux 2023)
-sudo yum install redis7 -y
-sudo systemctl start redis7
-sudo systemctl enable redis7
+# Try different Redis package names for AL2023
+if sudo yum install redis6 -y 2>/dev/null; then
+    REDIS_SERVICE="redis6"
+    echo "Installed Redis 6"
+elif sudo yum install redis -y 2>/dev/null; then
+    REDIS_SERVICE="redis"
+    echo "Installed Redis"
+else
+    echo "Installing Redis from EPEL repository..."
+    sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm -y
+    sudo yum install redis -y
+    REDIS_SERVICE="redis"
+fi
+
+sudo systemctl start $REDIS_SERVICE
+sudo systemctl enable $REDIS_SERVICE
+echo "Redis service: $REDIS_SERVICE"
 
 echo -e "${YELLOW}📁 Creating project directory...${NC}"
 cd /home/ec2-user
