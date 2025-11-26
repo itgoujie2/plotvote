@@ -92,6 +92,14 @@ class Story(models.Model):
     language = models.CharField(max_length=5, choices=LANGUAGE_CHOICES, default='en', help_text="Story language")
     cover_image = models.ImageField(upload_to='story_covers/', blank=True, null=True)
 
+    # Story Framework / Bible (for AI context)
+    characters = models.TextField(blank=True, help_text="Main characters (name, role, description, traits)")
+    story_outline = models.TextField(blank=True, help_text="Overall plot structure and major story beats")
+    world_building = models.TextField(blank=True, help_text="Setting, world rules, magic system, technology level, etc.")
+    themes = models.TextField(blank=True, help_text="Main themes, tone, and mood")
+    planned_chapters = models.PositiveIntegerField(null=True, blank=True, help_text="Estimated total chapters")
+    writing_style_notes = models.TextField(blank=True, help_text="Narrative perspective, pacing preferences, tone")
+
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_stories')
     upvoters = models.ManyToManyField(User, related_name='upvoted_stories', blank=True, help_text="Users who upvoted this story pitch")
     subscribers = models.ManyToManyField(User, related_name='subscribed_stories', blank=True)
@@ -147,6 +155,54 @@ class Story(models.Model):
     @property
     def upvote_count(self):
         return self.upvoters.count()
+
+    def get_story_framework_context(self):
+        """
+        Generate formatted story framework for AI context
+        This ensures AI maintains consistency across chapters
+        """
+        context_parts = []
+
+        context_parts.append(f"STORY TITLE: {self.title}")
+        context_parts.append(f"GENRE: {self.get_genre_display()}")
+        context_parts.append(f"LANGUAGE: {self.get_language_display()}")
+        context_parts.append("")
+
+        context_parts.append("STORY PREMISE:")
+        context_parts.append(self.description)
+        context_parts.append("")
+
+        if self.characters:
+            context_parts.append("MAIN CHARACTERS:")
+            context_parts.append(self.characters)
+            context_parts.append("")
+
+        if self.story_outline:
+            context_parts.append("STORY OUTLINE:")
+            context_parts.append(self.story_outline)
+            context_parts.append("")
+
+        if self.world_building:
+            context_parts.append("WORLD BUILDING:")
+            context_parts.append(self.world_building)
+            context_parts.append("")
+
+        if self.themes:
+            context_parts.append("THEMES & TONE:")
+            context_parts.append(self.themes)
+            context_parts.append("")
+
+        if self.writing_style_notes:
+            context_parts.append("WRITING STYLE:")
+            context_parts.append(self.writing_style_notes)
+            context_parts.append("")
+
+        if self.planned_chapters:
+            current_progress = (self.total_chapters / self.planned_chapters) * 100 if self.planned_chapters > 0 else 0
+            context_parts.append(f"STORY PROGRESS: Chapter {self.current_chapter_number} of {self.planned_chapters} ({current_progress:.0f}%)")
+            context_parts.append("")
+
+        return "\n".join(context_parts)
 
     @property
     def is_active(self):

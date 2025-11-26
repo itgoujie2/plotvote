@@ -78,6 +78,180 @@
                 </p>
             </div>
 
+            <!-- Story Framework Section (Optional but Recommended) -->
+            <div class="border border-gray-300 rounded-lg">
+                <button
+                    type="button"
+                    onclick="toggleFramework()"
+                    class="w-full flex items-center justify-between px-6 py-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-t-lg hover:from-purple-100 hover:to-indigo-100 transition"
+                >
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <div class="text-left">
+                            <h3 class="font-bold text-gray-900">Story Framework (Optional but Recommended)</h3>
+                            <p class="text-sm text-gray-600">Help AI maintain consistency across chapters</p>
+                        </div>
+                    </div>
+                    <svg id="framework-chevron" class="w-5 h-5 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <div id="framework-section" class="hidden px-6 pb-6 pt-4 space-y-6 bg-gray-50 rounded-b-lg">
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                        <p class="text-sm text-amber-900">
+                            <strong>Why use a Story Framework?</strong> The AI will use these details as context when generating each chapter, ensuring character names, traits, world rules, and plot remain consistent throughout your story.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="characters" class="block text-sm font-medium text-gray-700 mb-2">
+                            Main Characters
+                        </label>
+                        <textarea
+                            id="characters"
+                            name="characters"
+                            rows="6"
+                            placeholder="Aria Ironforge (protagonist): 19-year-old blacksmith, brave but inexperienced, orphaned at age 5, skilled craftsman, stubborn. Dreams of adventure beyond her village.
+
+Master Torin: Elderly blacksmith mentor, 68 years old, knows Aria's secret heritage, protective father figure.
+
+Prince Kael: Reluctant ally, 24, heir to the Northern Kingdom, duty-bound but compassionate, skilled swordsman."
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                        ></textarea>
+                        <p class="text-sm text-gray-500 mt-1">
+                            List main characters with names, ages, personalities, skills, and character arcs
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="story_outline" class="block text-sm font-medium text-gray-700 mb-2">
+                            Story Outline / Plot Structure
+                        </label>
+                        <textarea
+                            id="story_outline"
+                            name="story_outline"
+                            rows="8"
+                            placeholder="Act 1: Discovery (Chapters 1-5)
+- Aria finds dragon egg in her forge
+- Learns about her true heritage from Master Torin
+- Village attacked by Shadow Council, forced to flee
+
+Act 2: Journey (Chapters 6-15)
+- Travel through the five kingdoms seeking allies
+- Meet Prince Kael, reluctant partnership forms
+- Learn dragon magic, egg begins to hatch
+- Discover Shadow Council's true motives
+
+Act 3: Confrontation (Chapters 16-20)
+- Final battle with Shadow Council
+- Aria's dragon hatches, first flight
+- Restore balance to the realm
+- Aria accepts her role as Dragon Heir"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                        ></textarea>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Outline your story's major plot points, acts, and planned story arc
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="world_building" class="block text-sm font-medium text-gray-700 mb-2">
+                            World Building & Setting
+                        </label>
+                        <textarea
+                            id="world_building"
+                            name="world_building"
+                            rows="6"
+                            placeholder="Setting: Medieval fantasy world, five kingdoms (North: icy mountains, South: desert plains, East: ancient forests, West: coastal cities, Central: volcanic highlands)
+
+Magic System: Dragon-bonded magic - only those with dragon blood can wield elemental powers. Magic is rare, feared by common folk.
+
+Technology: Medieval level with minor magic enhancements. No gunpowder. Blacksmiths are highly respected.
+
+History: Dragons vanished 100 years ago during The Great Silence. Reason unknown. Most believe dragons are extinct.
+
+Society: Monarchies rule each kingdom. Blacksmiths' Guild holds political power."
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                        ></textarea>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Describe your world's setting, magic system, technology level, and important rules
+                        </p>
+                    </div>
+
+                    <div>
+                        <label for="themes" class="block text-sm font-medium text-gray-700 mb-2">
+                            Themes & Tone
+                        </label>
+                        <textarea
+                            id="themes"
+                            name="themes"
+                            rows="4"
+                            placeholder="Themes: Coming of age, finding your true identity, responsibility vs. freedom, balance between power and wisdom
+
+Tone: Epic fantasy with personal stakes, moments of humor to balance intensity, focus on character growth over action, hopeful despite challenges"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                        ></textarea>
+                        <p class="text-sm text-gray-500 mt-1">
+                            What themes does your story explore? What's the overall tone and mood?
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="planned_chapters" class="block text-sm font-medium text-gray-700 mb-2">
+                                Planned Total Chapters
+                            </label>
+                            <input
+                                type="number"
+                                id="planned_chapters"
+                                name="planned_chapters"
+                                min="1"
+                                max="200"
+                                placeholder="20"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                            >
+                            <p class="text-sm text-gray-500 mt-1">
+                                Estimated total chapters (can be adjusted later)
+                            </p>
+                        </div>
+
+                        <div>
+                            <label for="writing_style_notes" class="block text-sm font-medium text-gray-700 mb-2">
+                                Writing Style Preferences
+                            </label>
+                            <textarea
+                                id="writing_style_notes"
+                                name="writing_style_notes"
+                                rows="3"
+                                placeholder="Third-person limited (Aria's POV), descriptive but accessible prose, balance action with introspection, end chapters with hooks"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
+                            ></textarea>
+                            <p class="text-sm text-gray-500 mt-1">
+                                POV, narrative style, pacing preferences
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function toggleFramework() {
+                    const section = document.getElementById('framework-section');
+                    const chevron = document.getElementById('framework-chevron');
+
+                    if (section.classList.contains('hidden')) {
+                        section.classList.remove('hidden');
+                        chevron.classList.add('rotate-180');
+                    } else {
+                        section.classList.add('hidden');
+                        chevron.classList.remove('rotate-180');
+                    }
+                }
+            </script>
+
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <h3 class="font-semibold text-blue-900 mb-2">💡 Tips for Great Pitches:</h3>
                 <ul class="text-sm text-blue-800 space-y-1">

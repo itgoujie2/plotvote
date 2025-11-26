@@ -31,67 +31,84 @@
     </div>
 </div>
 
-<!-- Current Voting / Prompt Submission -->
-<div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 mb-8 text-white">
-    <h2 class="text-2xl font-bold mb-2">
-        {% if current_prompts %}
-            Vote for Chapter {{ story.current_chapter_number }}!
-        {% else %}
-            Submit Ideas for Chapter {{ story.current_chapter_number }}!
-        {% endif %}
-    </h2>
-    <p class="text-indigo-100 mb-6">
-        {% if current_prompts %}
-            What should happen next? Vote for your favorite prompt below.
-        {% else %}
-            Be the first to suggest what happens next! Submit your prompt below.
-        {% endif %}
-    </p>
+<!-- Current Voting / Prompt Submission (Only for Collaborative Stories) -->
+{% if story.story_type == 'collaborative' %}
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 mb-8 text-white">
+        <h2 class="text-2xl font-bold mb-2">
+            {% if current_prompts %}
+                Vote for Chapter {{ story.current_chapter_number }}!
+            {% else %}
+                Submit Ideas for Chapter {{ story.current_chapter_number }}!
+            {% endif %}
+        </h2>
+        <p class="text-indigo-100 mb-6">
+            {% if current_prompts %}
+                What should happen next? Vote for your favorite prompt below.
+            {% else %}
+                Be the first to suggest what happens next! Submit your prompt below.
+            {% endif %}
+        </p>
 
-    {% if current_prompts %}
-        <div class="space-y-4">
-            {% for prompt in current_prompts %}
-                <div class="bg-white/10 backdrop-blur rounded-lg p-4">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex-1">
-                            <p class="text-white font-medium">{{ prompt.prompt_text }}</p>
-                            <p class="text-indigo-200 text-sm mt-1">by {{ prompt.user.username }}</p>
+        {% if current_prompts %}
+            <div class="space-y-4">
+                {% for prompt in current_prompts %}
+                    <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex-1">
+                                <p class="text-white font-medium">{{ prompt.prompt_text }}</p>
+                                <p class="text-indigo-200 text-sm mt-1">by {{ prompt.user.username }}</p>
+                            </div>
+                            <div class="text-right ml-4">
+                                <div class="text-2xl font-bold">{{ prompt.vote_count }}</div>
+                                <div class="text-sm text-indigo-200">vote{{ prompt.vote_count|pluralize }}</div>
+                            </div>
                         </div>
-                        <div class="text-right ml-4">
-                            <div class="text-2xl font-bold">{{ prompt.vote_count }}</div>
-                            <div class="text-sm text-indigo-200">vote{{ prompt.vote_count|pluralize }}</div>
-                        </div>
+
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'stories:vote_prompt' prompt.id %}" method="post" class="mt-3">
+                                {% csrf_token %}
+                                <button type="submit" class="{% if user_voted_prompt.id == prompt.id %}bg-yellow-400 text-gray-900{% else %}bg-white/20 text-white{% endif %} px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/30 transition">
+                                    {% if user_voted_prompt.id == prompt.id %}Your Vote ✓{% else %}Vote for This{% endif %}
+                                </button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="inline-block bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/30 transition mt-3">
+                                Login to Vote
+                            </a>
+                        {% endif %}
                     </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-                    {% if user.is_authenticated %}
-                        <form action="{% url 'stories:vote_prompt' prompt.id %}" method="post" class="mt-3">
-                            {% csrf_token %}
-                            <button type="submit" class="{% if user_voted_prompt.id == prompt.id %}bg-yellow-400 text-gray-900{% else %}bg-white/20 text-white{% endif %} px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/30 transition">
-                                {% if user_voted_prompt.id == prompt.id %}Your Vote ✓{% else %}Vote for This{% endif %}
-                            </button>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="inline-block bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-white/30 transition mt-3">
-                            Login to Vote
-                        </a>
-                    {% endif %}
-                </div>
-            {% endfor %}
+        <div class="mt-6 text-center">
+            {% if user.is_authenticated %}
+                <a href="{% url 'stories:submit_prompt' story.slug %}" class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    {% if current_prompts %}Submit Your Own Prompt{% else %}Submit First Prompt{% endif %}
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Login to Submit Prompt
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <!-- Personal Story - Continue Writing -->
+    {% if user.is_authenticated and story.created_by == user %}
+        <div class="bg-gradient-to-r from-green-500 to-teal-600 rounded-lg shadow-lg p-8 mb-8 text-white">
+            <h2 class="text-2xl font-bold mb-2">Continue Your Story</h2>
+            <p class="text-green-100 mb-6">
+                Write what happens next in Chapter {{ story.current_chapter_number }}. Use AI to generate engaging content from your prompts.
+            </p>
+            <div class="text-center">
+                <a href="{% url 'stories:continue_personal_story' story.slug %}" class="inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    {% if chapters %}Continue Writing{% else %}Start Writing Chapter 1{% endif %}
+                </a>
+            </div>
         </div>
     {% endif %}
-
-    <div class="mt-6 text-center">
-        {% if user.is_authenticated %}
-            <a href="{% url 'stories:submit_prompt' story.slug %}" class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                {% if current_prompts %}Submit Your Own Prompt{% else %}Submit First Prompt{% endif %}
-            </a>
-        {% else %}
-            <a href="{% url 'login' %}" class="inline-block bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                Login to Submit Prompt
-            </a>
-        {% endif %}
-    </div>
-</div>
+{% endif %}
 
 <!-- Chapters List -->
 <div class="bg-white rounded-lg shadow-sm p-8">

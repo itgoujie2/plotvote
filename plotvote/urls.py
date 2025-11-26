@@ -18,11 +18,17 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+from users import views as user_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('stories.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('users/', include('users.urls')),
+
+    # Payment callbacks (need to be at root level for Stripe redirects)
+    path('credits/success', user_views.payment_success, name='payment_success'),
+    path('credits/cancel', user_views.payment_cancel, name='payment_cancel'),
 ]
 
 # Serve media files in development

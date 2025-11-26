@@ -3,25 +3,28 @@
 {% block title %}{{ chapter.title }} - {{ story.title }} - PlotVote{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto">
-    <!-- Chapter Header -->
-    <div class="mb-8">
-        <a href="{% url 'stories:story_detail' story.slug %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-4 inline-block">
-            ← Back to {{ story.title }}
-        </a>
+<div class="max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Main Content Area -->
+        <div class="lg:col-span-3">
+            <!-- Chapter Header -->
+            <div class="mb-8">
+                <a href="{% url 'stories:story_detail' story.slug %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-4 inline-block">
+                    ← Back to {{ story.title }}
+                </a>
 
-        <h1 class="text-4xl font-bold text-gray-900 mb-2">
-            Chapter {{ chapter.chapter_number }}: {{ chapter.title }}
-        </h1>
-        <div class="text-gray-500 text-sm">
-            {{ chapter.word_count }} words • {{ chapter.read_time_minutes }} min read • Published {{ chapter.published_at|date:"F d, Y" }}
-        </div>
-    </div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                    Chapter {{ chapter.chapter_number }}: {{ chapter.title }}
+                </h1>
+                <div class="text-gray-500 text-sm">
+                    {{ chapter.word_count }} words • {{ chapter.read_time_minutes }} min read • Published {{ chapter.published_at|date:"F d, Y" }}
+                </div>
+            </div>
 
-    <!-- Chapter Content -->
-    <div class="bg-white rounded-lg shadow-sm p-8 md:p-12 prose prose-lg max-w-none mb-8">
-        {{ chapter.content|linebreaks }}
-    </div>
+            <!-- Chapter Content -->
+            <div class="bg-white rounded-lg shadow-sm p-8 md:p-12 prose prose-lg max-w-none mb-8">
+                {{ chapter.content|linebreaks }}
+            </div>
 
     <!-- Navigation -->
     <div class="flex justify-between items-center mb-8">
@@ -54,58 +57,160 @@
         </div>
     </div>
 
-    <!-- Comments Section -->
-    <div class="bg-white rounded-lg shadow-sm p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
+            <!-- Comments Section -->
+            <div class="bg-white rounded-lg shadow-sm p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
 
-        <!-- Add Comment Form -->
-        {% if user.is_authenticated %}
-            <form method="post" action="{% url 'stories:add_comment' story.slug chapter.chapter_number %}" class="mb-8">
-                {% csrf_token %}
-                <div class="mb-4">
-                    <label for="comment_content" class="block text-sm font-medium text-gray-700 mb-2">Add your comment</label>
-                    <textarea
-                        name="content"
-                        id="comment_content"
-                        rows="4"
-                        maxlength="1000"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="Share your thoughts about this chapter..."
-                        required
-                    ></textarea>
-                    <p class="text-sm text-gray-500 mt-1">Maximum 1000 characters</p>
-                </div>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-lg transition">
-                    Post Comment
-                </button>
-            </form>
-        {% else %}
-            <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 text-center">
-                <p class="text-gray-600">
-                    <a href="{% url 'login' %}?next={{ request.path }}" class="text-indigo-600 hover:text-indigo-700 font-semibold">Log in</a>
-                    or
-                    <a href="{% url 'users:register' %}?next={{ request.path }}" class="text-indigo-600 hover:text-indigo-700 font-semibold">register</a>
-                    to comment
-                </p>
-            </div>
-        {% endif %}
-
-        <!-- Display Comments -->
-        {% if comments %}
-            <div class="space-y-4">
-                {% for comment in comments %}
-                    <div class="border-l-4 border-indigo-500 pl-4 py-2">
-                        <div class="flex items-center gap-2 mb-2">
-                            <span class="font-semibold text-gray-900">{{ comment.user.username }}</span>
-                            <span class="text-gray-500 text-sm">{{ comment.created_at|timesince }} ago</span>
+                <!-- Add Comment Form -->
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'stories:add_comment' story.slug chapter.chapter_number %}" class="mb-8">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="comment_content" class="block text-sm font-medium text-gray-700 mb-2">Add your comment</label>
+                            <textarea
+                                name="content"
+                                id="comment_content"
+                                rows="4"
+                                maxlength="1000"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                placeholder="Share your thoughts about this chapter..."
+                                required
+                            ></textarea>
+                            <p class="text-sm text-gray-500 mt-1">Maximum 1000 characters</p>
                         </div>
-                        <p class="text-gray-700">{{ comment.content }}</p>
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-lg transition">
+                            Post Comment
+                        </button>
+                    </form>
+                {% else %}
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8 text-center">
+                        <p class="text-gray-600">
+                            <a href="{% url 'login' %}?next={{ request.path }}" class="text-indigo-600 hover:text-indigo-700 font-semibold">Log in</a>
+                            or
+                            <a href="{% url 'users:register' %}?next={{ request.path }}" class="text-indigo-600 hover:text-indigo-700 font-semibold">register</a>
+                            to comment
+                        </p>
                     </div>
-                {% endfor %}
+                {% endif %}
+
+                <!-- Display Comments -->
+                {% if comments %}
+                    <div class="space-y-4">
+                        {% for comment in comments %}
+                            <div class="border-l-4 border-indigo-500 pl-4 py-2">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="font-semibold text-gray-900">{{ comment.user.username }}</span>
+                                    <span class="text-gray-500 text-sm">{{ comment.created_at|timesince }} ago</span>
+                                </div>
+                                <p class="text-gray-700">{{ comment.content }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-500 text-center py-8">No comments yet. Be the first to comment!</p>
+                {% endif %}
             </div>
-        {% else %}
-            <p class="text-gray-500 text-center py-8">No comments yet. Be the first to comment!</p>
-        {% endif %}
+        </div>
+
+        <!-- Sidebar with Ads -->
+        <aside class="lg:col-span-1">
+            <div class="sticky top-4 space-y-6">
+                {% if user.is_authenticated and user.profile.has_active_subscription %}
+                    <!-- Ad-Free Badge for Subscribers -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-6 text-white text-center">
+                        <svg class="w-12 h-12 mx-auto mb-3 opacity-90" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <p class="text-sm font-semibold uppercase mb-2">Ad-Free Reading</p>
+                        <p class="text-xs opacity-90">You're a {{ user.subscription.plan.name }} subscriber!</p>
+                    </div>
+                {% else %}
+                    <!-- AdSense Ad Unit -->
+                    <div class="bg-white rounded-lg shadow-sm p-4">
+                        <p class="text-xs text-gray-500 text-center mb-3">Advertisement</p>
+
+                        <!-- Google AdSense Code -->
+                        <div class="adsense-container">
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX"
+                                    crossorigin="anonymous"></script>
+                            <!-- Chapter Sidebar Ad -->
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-XXXXXXXXXX"
+                                 data-ad-slot="YYYYYYYYYY"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+                        <p class="text-xs text-gray-400 text-center mt-3">
+                            <a href="/subscribe" class="text-indigo-600 hover:text-indigo-700 font-medium">
+                                Remove ads - $4.99/mo
+                            </a>
+                        </p>
+                    </div>
+
+                    <!-- Second Ad Unit (Sticky) -->
+                    <div class="bg-white rounded-lg shadow-sm p-4">
+                        <p class="text-xs text-gray-500 text-center mb-3">Advertisement</p>
+
+                        <div class="adsense-container">
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXX"
+                                    crossorigin="anonymous"></script>
+                            <!-- Chapter Sidebar Ad 2 -->
+                            <ins class="adsbygoogle"
+                                 style="display:block"
+                                 data-ad-client="ca-pub-XXXXXXXXXX"
+                                 data-ad-slot="ZZZZZZZZZZ"
+                                 data-ad-format="auto"
+                                 data-full-width-responsive="true"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+
+                    <!-- Upgrade CTA -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg p-6 text-white">
+                        <h3 class="font-bold text-lg mb-2">Tired of Ads?</h3>
+                        <p class="text-sm mb-4 opacity-90">Get unlimited ad-free reading + 5 generation credits</p>
+                        <a href="/subscribe" class="block w-full bg-white text-indigo-600 font-semibold py-2 px-4 rounded-lg hover:bg-gray-100 transition text-center">
+                            Subscribe - $4.99/mo
+                        </a>
+                    </div>
+                {% endif %}
+
+                <!-- Story Info -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <h3 class="font-semibold text-gray-900 mb-3">About This Story</h3>
+                    <div class="space-y-2 text-sm text-gray-600">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                            </svg>
+                            <span>{{ story.total_chapters }} chapter{{ story.total_chapters|pluralize }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>By {{ story.created_by.username }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>{{ story.get_genre_display }}</span>
+                        </div>
+                    </div>
+                    <a href="{% url 'stories:story_detail' story.slug %}" class="block w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-center font-semibold py-2 rounded-lg transition">
+                        View All Chapters
+                    </a>
+                </div>
+            </div>
+        </aside>
     </div>
 </div>
 {% endblock %}

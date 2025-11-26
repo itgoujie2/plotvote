@@ -33,6 +33,11 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 # OpenAI API Key
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
 
+# Stripe API Keys
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+
 ALLOWED_HOSTS = []
 
 
@@ -74,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.daily_login_check',
             ],
         },
     },

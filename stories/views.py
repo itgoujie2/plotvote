@@ -8,16 +8,17 @@ from django.utils import timezone
 from django.db.models import Count, Q
 from .models import Story, Chapter, Prompt, Vote, Comment
 from .ai_generator import generate_chapter
+from users.models import CreditTransaction
 
 
 def homepage(request):
-    """Homepage showing active stories and pitched stories"""
+    """Homepage showing active stories and pitched stories (collaborative only)"""
     # Get language filter from query params
     language_filter = request.GET.get('language', '')
 
-    # Base querysets
-    active_stories_qs = Story.objects.filter(status='active')
-    pitched_stories_qs = Story.objects.filter(status='pitch')
+    # Base querysets - only show collaborative stories on homepage
+    active_stories_qs = Story.objects.filter(status='active', story_type='collaborative')
+    pitched_stories_qs = Story.objects.filter(status='pitch', story_type='collaborative')
 
     # Apply language filter if specified
     if language_filter:
@@ -78,6 +79,32 @@ def chapter_detail(request, slug, chapter_number):
     """Individual chapter reading view"""
     story = get_object_or_404(Story, slug=slug)
     chapter = get_object_or_404(Chapter, story=story, chapter_number=chapter_number, status='published')
+
+    # Record chapter view for logged-in users (assume 100% read for now)
+    reward_info = None
+    if request.user.is_authenticated and request.user != story.created_by:
+        from users.credit_rewards import record_chapter_view
+        view, reward = record_chapter_view(chapter, request.user, read_percentage=100)
+        reward_info = reward
+
+    # Show reward notification if earned
+    if reward_info and reward_info['awarded']:
+        messages.success(request, f'🎉 "{story.title}" reached {reward_info["milestone"]} readers! You earned {reward_info["credits"]} credits!')
+
+    # Track ad impression for non-subscribers
+    if request.user.is_authenticated:
+        if not request.user.profile.has_active_subscription():
+            # Record ad view
+            from users.models import AdView
+            AdView.objects.create(
+                user=request.user,
+                chapter=chapter,
+                ad_duration_seconds=0,  # Banner ads don't have duration
+                watched_full=True,  # Banner ads are always "watched"
+                skipped_with_credits=False,
+                ip_address=request.META.get('REMOTE_ADDR'),
+                user_agent=request.META.get('HTTP_USER_AGENT', '')[:255]
+            )
 
     # Get previous and next chapters
     prev_chapter = Chapter.objects.filter(
@@ -214,6 +241,14 @@ def create_story_pitch(request):
         genre = request.POST.get('genre', 'fantasy')
         language = request.POST.get('language', 'en')
 
+        # Story Framework fields (optional)
+        characters = request.POST.get('characters', '').strip()
+        story_outline = request.POST.get('story_outline', '').strip()
+        world_building = request.POST.get('world_building', '').strip()
+        themes = request.POST.get('themes', '').strip()
+        planned_chapters = request.POST.get('planned_chapters', '').strip()
+        writing_style_notes = request.POST.get('writing_style_notes', '').strip()
+
         if not title or not description:
             messages.error(request, 'Title and description are required.')
         elif len(description) < 100:
@@ -225,7 +260,14 @@ def create_story_pitch(request):
                 genre=genre,
                 language=language,
                 created_by=request.user,
-                status='pitch'
+                status='pitch',
+                # Story Framework fields
+                characters=characters,
+                story_outline=story_outline,
+                world_building=world_building,
+                themes=themes,
+                planned_chapters=int(planned_chapters) if planned_chapters else None,
+                writing_style_notes=writing_style_notes,
             )
             # Auto-upvote your own pitch
             story.upvoters.add(request.user)
@@ -290,16 +332,20 @@ def add_comment(request, slug, chapter_number):
 
 @login_required
 def my_stories(request):
-    """List user's personal stories"""
-    personal_stories = Story.objects.filter(
-        story_type='personal',
+    """List user's personal stories (including published ones)"""
+    # Get both personal stories AND collaborative stories created by this user
+    # (collaborative stories are personal stories that have been published)
+    my_stories_list = Story.objects.filter(
         created_by=request.user
+    ).filter(
+        Q(story_type='personal') |
+        Q(story_type='collaborative', created_by=request.user)
     ).annotate(
         chapter_count=Count('chapters', filter=Q(chapters__status='published'))
     ).order_by('-updated_at')
 
     context = {
-        'personal_stories': personal_stories,
+        'personal_stories': my_stories_list,
     }
     return render(request, 'stories/my_stories.html', context)
 
@@ -313,6 +359,14 @@ def create_personal_story(request):
         genre = request.POST.get('genre', 'fantasy')
         language = request.POST.get('language', 'en')
 
+        # Story Framework fields (optional)
+        characters = request.POST.get('characters', '').strip()
+        story_outline = request.POST.get('story_outline', '').strip()
+        world_building = request.POST.get('world_building', '').strip()
+        themes = request.POST.get('themes', '').strip()
+        planned_chapters = request.POST.get('planned_chapters', '').strip()
+        writing_style_notes = request.POST.get('writing_style_notes', '').strip()
+
         if not title or not description:
             messages.error(request, 'Title and description are required.')
         elif len(description) < 50:
@@ -325,7 +379,14 @@ def create_personal_story(request):
                 genre=genre,
                 language=language,
                 created_by=request.user,
-                status='active'
+                status='active',
+                # Story Framework fields
+                characters=characters,
+                story_outline=story_outline,
+                world_building=world_building,
+                themes=themes,
+                planned_chapters=int(planned_chapters) if planned_chapters else None,
+                writing_style_notes=writing_style_notes,
             )
             messages.success(request, f'Personal story "{title}" created! Start writing your first chapter.')
             return redirect('stories:continue_personal_story', slug=story.slug)
@@ -355,11 +416,32 @@ def continue_personal_story(request, slug):
         elif len(prompt_text) > 1000:
             messages.error(request, 'Prompt must be 1000 characters or less.')
         else:
+            # Check if user has enough credits
+            profile = request.user.profile
+            if not profile.has_credits(1):
+                messages.error(request, 'Not enough credits! You need 1 credit to generate a chapter.')
+                return redirect('stories:credits_dashboard')
+
+            # Deduct credit before generation
+            if not profile.deduct_credits(1):
+                messages.error(request, 'Failed to deduct credits. Please try again.')
+                return redirect('stories:continue_personal_story', slug=story.slug)
+
             # Generate chapter using AI
             previous_chapters = story.chapters.filter(status='published').order_by('-chapter_number')
             result = generate_chapter(story, prompt_text, previous_chapters)
 
             if 'error' in result:
+                # Refund credit on error
+                profile.add_credits(1, source='earned')
+                CreditTransaction.objects.create(
+                    user=request.user,
+                    amount=1,
+                    transaction_type='refund',
+                    description=f'Refund for failed chapter generation: {result["error"][:100]}',
+                    story=story,
+                    balance_after=profile.credits
+                )
                 messages.error(request, result['error'])
             else:
                 # Create and publish the chapter
@@ -374,12 +456,63 @@ def continue_personal_story(request, slug):
                 story.updated_at = timezone.now()
                 story.save()
 
-                messages.success(request, f'Chapter {next_chapter_number} has been generated!')
+                # Record transaction
+                CreditTransaction.objects.create(
+                    user=request.user,
+                    amount=-1,
+                    transaction_type='spent',
+                    description=f'Generated chapter {next_chapter_number} for "{story.title}"',
+                    story=story,
+                    chapter=chapter,
+                    balance_after=profile.credits
+                )
+
+                messages.success(request, f'Chapter {next_chapter_number} has been generated! You have {profile.credits} credits remaining.')
                 return redirect('stories:chapter_detail', slug=story.slug, chapter_number=next_chapter_number)
 
     context = {
         'story': story,
         'last_chapter': last_chapter,
         'next_chapter_number': next_chapter_number,
+        'user_credits': request.user.profile.credits,
     }
     return render(request, 'stories/continue_personal_story.html', context)
+
+
+@login_required
+def publish_story(request, slug):
+    """Publish a personal story to the community"""
+    if request.method != 'POST':
+        return redirect('stories:my_stories')
+
+    story = get_object_or_404(Story, slug=slug, story_type='personal', created_by=request.user)
+
+    # Check if story has at least one chapter
+    if story.total_chapters == 0:
+        messages.error(request, 'You need to write at least one chapter before publishing.')
+        return redirect('stories:my_stories')
+
+    # Convert to collaborative story
+    story.story_type = 'collaborative'
+    story.status = 'active'
+    story.save()
+
+    messages.success(request, f'🎉 "{story.title}" has been published to the community! Others can now read and vote on prompts.')
+    return redirect('stories:story_detail', slug=story.slug)
+
+
+@login_required
+def credits_dashboard(request):
+    """Credits dashboard showing balance and transaction history"""
+    from users.models import CreditPackage
+
+    profile = request.user.profile
+    transactions = request.user.credit_transactions.all()[:20]  # Last 20 transactions
+    packages = CreditPackage.objects.filter(is_active=True).order_by('display_order')
+
+    context = {
+        'profile': profile,
+        'transactions': transactions,
+        'packages': packages,
+    }
+    return render(request, 'stories/credits_dashboard.html', context)

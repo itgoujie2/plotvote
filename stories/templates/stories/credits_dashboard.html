@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+
+{% block title %}Credits - PlotVote{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-gray-900 mb-8">Your Credits</h1>
+
+    <!-- Credit Balance Card -->
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 mb-8 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-indigo-100 text-sm font-semibold uppercase mb-2">Available Credits</p>
+                <p class="text-6xl font-bold">{{ profile.credits }}</p>
+                <p class="text-indigo-100 mt-2">
+                    1 credit = 1 AI-generated chapter (~1000 words)
+                </p>
+            </div>
+            <div class="text-right">
+                <svg class="w-24 h-24 text-white opacity-25" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="border-t border-indigo-400 mt-6 pt-6 grid grid-cols-3 gap-4 text-center">
+            <div>
+                <p class="text-indigo-100 text-xs uppercase mb-1">Total Earned</p>
+                <p class="text-2xl font-bold">{{ profile.total_credits_earned }}</p>
+            </div>
+            <div>
+                <p class="text-indigo-100 text-xs uppercase mb-1">Total Purchased</p>
+                <p class="text-2xl font-bold">{{ profile.total_credits_purchased }}</p>
+            </div>
+            <div>
+                <p class="text-indigo-100 text-xs uppercase mb-1">Total Used</p>
+                <p class="text-2xl font-bold">{{ profile.total_credits_used }}</p>
+            </div>
+        </div>
+
+        {% if profile.credits < 5 %}
+            <div class="bg-yellow-500 bg-opacity-30 border border-yellow-300 rounded-lg p-4 mt-6">
+                <p class="font-semibold mb-2">⚠️ Running low on credits!</p>
+                <p class="text-sm text-yellow-100">You have {{ profile.credits }} credit{{ profile.credits|pluralize }} remaining. Consider purchasing more to continue creating stories.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Buy Credits Section -->
+    <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Buy More Credits</h2>
+        <p class="text-gray-600 mb-6">Choose a credit package that fits your needs. Credits never expire!</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {% for package in packages %}
+                <div class="border-2 {% if package.is_popular %}border-indigo-500 pt-8{% else %}border-gray-200{% endif %} rounded-lg p-6 hover:border-indigo-500 transition relative">
+                    {% if package.is_popular %}
+                        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+                            <span class="bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-full">MOST POPULAR</span>
+                        </div>
+                    {% endif %}
+
+                    <p class="text-sm font-semibold {% if package.is_popular %}text-indigo-600{% else %}text-gray-500{% endif %} uppercase mb-2">
+                        {{ package.name }}
+                    </p>
+                    <p class="text-3xl font-bold text-gray-900 mb-1">${{ package.price }}</p>
+                    <p class="text-gray-600 mb-4">{{ package.credits }} chapter{{ package.credits|pluralize }}</p>
+                    <p class="text-sm {% if package.savings_percent > 0 %}text-green-600{% else %}text-gray-500{% endif %} mb-4">
+                        ${{ package.price_per_credit|floatformat:2 }} per chapter
+                        {% if package.savings_percent > 0 %}({{ package.savings_percent }}% off){% endif %}
+                    </p>
+
+                    <form action="{% url 'users:checkout' package.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full {% if package.is_popular %}bg-indigo-600 text-white hover:bg-indigo-700{% else %}bg-gray-200 text-gray-800 hover:bg-gray-300{% endif %} font-semibold px-4 py-2 rounded-lg transition">
+                            Buy Now
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-6">
+            <p class="text-sm text-blue-800">
+                <strong>🔒 Secure Payment:</strong> Powered by Stripe. Your payment information is encrypted and secure. Credits never expire!
+            </p>
+        </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="bg-white rounded-lg shadow-sm p-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Transaction History</h2>
+
+        {% if transactions %}
+            <div class="space-y-3">
+                {% for transaction in transactions %}
+                    <div class="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                {% if transaction.transaction_type == 'spent' %}
+                                    <span class="text-red-600">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                {% elif transaction.transaction_type == 'bonus' or transaction.transaction_type == 'earned' %}
+                                    <span class="text-green-600">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                {% elif transaction.transaction_type == 'purchase' %}
+                                    <span class="text-blue-600">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                {% else %}
+                                    <span class="text-gray-600">
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </span>
+                                {% endif %}
+                                <span class="font-medium text-gray-900 capitalize">{{ transaction.get_transaction_type_display }}</span>
+                            </div>
+                            <p class="text-sm text-gray-600">{{ transaction.description }}</p>
+                            <p class="text-xs text-gray-400 mt-1">{{ transaction.created_at|date:"M d, Y g:i A" }}</p>
+                        </div>
+                        <div class="text-right ml-4">
+                            <p class="text-lg font-bold {% if transaction.amount > 0 %}text-green-600{% else %}text-red-600{% endif %}">
+                                {% if transaction.amount > 0 %}+{% endif %}{{ transaction.amount }}
+                            </p>
+                            <p class="text-xs text-gray-500">Balance: {{ transaction.balance_after }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500 text-center py-8">No transactions yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Ways to Earn Free Credits -->
+    <div class="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-8 mt-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">💡 Earn Free Credits</h2>
+        <p class="text-gray-600 mb-6">Get more credits without paying!</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg p-4 border-2 border-green-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">🎁</span>
+                    <div class="flex-1">
+                        <p class="font-semibold text-gray-900">Referral Program</p>
+                        <p class="text-sm text-gray-600 mb-2">Earn 3 credits per friend! They get 5 bonus credits.</p>
+                        <div class="bg-gray-100 p-2 rounded flex items-center gap-2">
+                            <code class="text-indigo-600 font-bold">{{ user.profile.referral_code }}</code>
+                            <button onclick="copyReferralCode()" class="text-xs bg-indigo-600 text-white px-2 py-1 rounded hover:bg-indigo-700">
+                                Copy
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Share: {{ request.scheme }}://{{ request.get_host }}/users/register/?ref={{ user.profile.referral_code }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 border-2 border-green-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">📅</span>
+                    <div>
+                        <p class="font-semibold text-gray-900">Daily Login</p>
+                        <p class="text-sm text-gray-600">Earn 1 credit every 2 days! (Max 15/month)</p>
+                        <p class="text-sm text-green-600 mt-2">
+                            🔥 Current streak: <strong>{{ user.profile.consecutive_login_days }} day{{ user.profile.consecutive_login_days|pluralize }}</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 border-2 border-green-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">👥</span>
+                    <div>
+                        <p class="font-semibold text-gray-900">Reading Rewards</p>
+                        <p class="text-sm text-gray-600">Earn credits when readers enjoy your stories!</p>
+                        <ul class="text-xs text-gray-600 mt-2 space-y-1">
+                            <li>• 10 readers = 1 credit</li>
+                            <li>• 50 readers = 5 credits</li>
+                            <li>• 100 readers = 12 credits</li>
+                            <li>• 500 readers = 75 credits</li>
+                            <li>• 1,000 readers = 200 credits</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-4 border-2 border-green-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">📱</span>
+                    <div>
+                        <p class="font-semibold text-gray-900">Social Sharing</p>
+                        <p class="text-sm text-gray-600">Earn 1 credit per share! (Max 5/month)</p>
+                        <p class="text-xs text-gray-500 mt-2">
+                            Share your published stories on social media to earn credits.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+        function copyReferralCode() {
+            const code = "{{ user.profile.referral_code }}";
+            const url = "{{ request.scheme }}://{{ request.get_host }}/users/register/?ref={{ user.profile.referral_code }}";
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Referral link copied to clipboard!');
+            });
+        }
+        </script>
+    </div>
+</div>
+{% endblock %}
