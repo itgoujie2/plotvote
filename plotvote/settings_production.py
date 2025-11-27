@@ -34,10 +34,10 @@ DATABASES = {
 
 # Security Settings
 SECRET_KEY = os.getenv('SECRET_KEY')
-# Disable SSL redirect until SSL is configured
-SECURE_SSL_REDIRECT = False  # Enable after SSL setup
-SESSION_COOKIE_SECURE = False  # Enable after SSL setup
-CSRF_COOKIE_SECURE = False  # Enable after SSL setup
+# SSL/HTTPS Security (enabled after SSL certificate setup)
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
