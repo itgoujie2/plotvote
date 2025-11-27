@@ -9,6 +9,8 @@ DEBUG = False
 
 # SECURITY WARNING: update this with your actual domain
 ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
     '18.191.166.7',  # Your EC2 IP
     'plotvote.com',  # Your domain (update this)
     'www.plotvote.com',  # Your domain with www (update this)
@@ -32,9 +34,10 @@ DATABASES = {
 
 # Security Settings
 SECRET_KEY = os.getenv('SECRET_KEY')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+# Disable SSL redirect until SSL is configured
+SECURE_SSL_REDIRECT = False  # Enable after SSL setup
+SESSION_COOKIE_SECURE = False  # Enable after SSL setup
+CSRF_COOKIE_SECURE = False  # Enable after SSL setup
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
