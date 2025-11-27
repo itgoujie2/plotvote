@@ -1,28 +1,19 @@
 [Unit]
 Description=PlotVote Celery Worker
-After=network.target redis6.service mariadb.service
+After=network.target redis6.service
 
 [Service]
-Type=simple
+Type=exec
 User=ec2-user
 Group=ec2-user
 WorkingDirectory=/home/ec2-user/plotvote
 EnvironmentFile=/home/ec2-user/plotvote/.env
-
-# Start Celery worker
 ExecStart=/home/ec2-user/plotvote/venv/bin/celery -A plotvote worker --loglevel=info
-
-# Output to journal and file
 StandardOutput=journal
 StandardError=journal
-
-# Restart configuration
-Restart=always
-RestartSec=5s
-
-# No timeout
-TimeoutStartSec=0
-TimeoutStopSec=30
+Restart=on-failure
+RestartSec=10s
+TimeoutStartSec=300
 
 [Install]
 WantedBy=multi-user.target

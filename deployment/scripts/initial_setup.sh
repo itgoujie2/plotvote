@@ -104,6 +104,22 @@ sudo chown -R ec2-user:ec2-user /var/log/gunicorn /var/log/celery
 sudo chown -R ec2-user:ec2-user /var/run/gunicorn /var/run/celery
 mkdir -p $PROJECT_DIR/logs
 
+# Ensure Redis6 service is running
+echo -e "${YELLOW}✅ Verifying Redis is running...${NC}"
+if systemctl is-active --quiet redis6; then
+    echo "Redis6 is already running"
+else
+    sudo systemctl start redis6
+    sudo systemctl enable redis6
+fi
+
+# Test Redis connection
+if redis-cli ping > /dev/null 2>&1; then
+    echo "✅ Redis connection successful"
+else
+    echo "⚠️  Warning: Could not connect to Redis"
+fi
+
 echo -e "${YELLOW}🔧 Installing systemd service files...${NC}"
 sudo cp deployment/systemd/plotvote.service /etc/systemd/system/
 sudo cp deployment/systemd/plotvote-celery.service /etc/systemd/system/
@@ -117,17 +133,44 @@ sudo systemctl enable nginx
 
 echo -e "${YELLOW}🔄 Reloading systemd and starting services...${NC}"
 sudo systemctl daemon-reload
+
+# Start main Django app
+echo "Starting PlotVote application..."
 sudo systemctl start plotvote
 sudo systemctl enable plotvote
+sleep 2
+
+# Start Celery worker
+echo "Starting Celery worker..."
 sudo systemctl start plotvote-celery
 sudo systemctl enable plotvote-celery
+sleep 2
+
+# Start Celery beat
+echo "Starting Celery beat scheduler..."
 sudo systemctl start plotvote-celery-beat
 sudo systemctl enable plotvote-celery-beat
+sleep 2
 
 echo -e "${YELLOW}✅ Checking service status...${NC}"
-sudo systemctl status plotvote --no-pager
-sudo systemctl status plotvote-celery --no-pager
-sudo systemctl status nginx --no-pager
+echo ""
+echo "=== PlotVote Django App ==="
+sudo systemctl status plotvote --no-pager -l | head -20
+echo ""
+echo "=== Celery Worker ==="
+sudo systemctl status plotvote-celery --no-pager -l | head -20
+echo ""
+echo "=== Celery Beat ==="
+sudo systemctl status plotvote-celery-beat --no-pager -l | head -15
+echo ""
+echo "=== Nginx ==="
+sudo systemctl status nginx --no-pager -l | head -10
+echo ""
+echo "=== Redis ==="
+sudo systemctl status redis6 --no-pager -l | head -10
+echo ""
+echo "=== MariaDB ==="
+sudo systemctl status mariadb --no-pager -l | head -10
 
 echo -e "${GREEN}✅ Initial setup completed successfully!${NC}"
 echo ""
