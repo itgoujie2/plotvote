@@ -38,7 +38,12 @@ STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '18.191.166.7',  # EC2 IP
+    '*',  # Allow all hosts in development - remove in production
+]
 
 
 # Application definition
