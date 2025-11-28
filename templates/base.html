@@ -47,7 +47,10 @@
                             {{ user.profile.credits }} Credits
                         </a>
                         <span class="text-gray-700">Hello, {{ user.username }}!</span>
-                        <a href="{% url 'logout' %}" class="text-gray-600 hover:text-gray-900">Logout</a>
+                        <form method="post" action="{% url 'logout' %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-gray-600 hover:text-gray-900 bg-transparent border-0 cursor-pointer">Logout</button>
+                        </form>
                     {% else %}
                         <a href="{% url 'login' %}" class="text-gray-600 hover:text-gray-900">Login</a>
                         <a href="{% url 'users:register' %}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">Sign Up</a>
