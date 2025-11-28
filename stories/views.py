@@ -502,6 +502,32 @@ def publish_story(request, slug):
 
 
 @login_required
+def mark_complete(request, slug):
+    """Mark a personal story as complete"""
+    if request.method != 'POST':
+        return redirect('stories:story_detail', slug=slug)
+
+    story = get_object_or_404(Story, slug=slug, created_by=request.user)
+
+    # Only allow marking personal stories as complete
+    if story.story_type != 'personal':
+        messages.error(request, 'Only personal stories can be marked as complete.')
+        return redirect('stories:story_detail', slug=slug)
+
+    # Check if already completed
+    if story.status == 'completed':
+        messages.info(request, 'This story is already marked as complete.')
+        return redirect('stories:story_detail', slug=slug)
+
+    # Mark as completed
+    story.status = 'completed'
+    story.save()
+
+    messages.success(request, f'"{story.title}" has been marked as complete!')
+    return redirect('stories:story_detail', slug=story.slug)
+
+
+@login_required
 def credits_dashboard(request):
     """Credits dashboard showing balance and transaction history"""
     from users.models import CreditPackage

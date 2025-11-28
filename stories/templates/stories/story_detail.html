@@ -32,7 +32,7 @@
 </div>
 
 <!-- Current Voting / Prompt Submission (Only for Collaborative Stories) -->
-{% if story.story_type == 'collaborative' %}
+{% if story.story_type == 'collaborative' and story.status != 'completed' %}
     <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow-lg p-8 mb-8 text-white">
         <h2 class="text-2xl font-bold mb-2">
             {% if current_prompts %}
@@ -94,19 +94,55 @@
         </div>
     </div>
 {% else %}
-    <!-- Personal Story - Continue Writing -->
+    <!-- Personal Story Section -->
     {% if user.is_authenticated and story.created_by == user %}
-        <div class="bg-gradient-to-r from-green-500 to-teal-600 rounded-lg shadow-lg p-8 mb-8 text-white">
-            <h2 class="text-2xl font-bold mb-2">Continue Your Story</h2>
-            <p class="text-green-100 mb-6">
-                Write what happens next in Chapter {{ story.current_chapter_number }}. Use AI to generate engaging content from your prompts.
-            </p>
-            <div class="text-center">
-                <a href="{% url 'stories:continue_personal_story' story.slug %}" class="inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                    {% if chapters %}Continue Writing{% else %}Start Writing Chapter 1{% endif %}
-                </a>
+        {% if story.status == 'completed' %}
+            <!-- Story Completed Badge -->
+            <div class="bg-gradient-to-r from-gray-700 to-gray-900 rounded-lg shadow-lg p-8 mb-8 text-white">
+                <div class="flex items-center justify-center mb-4">
+                    <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold mb-2 text-center">Story Complete!</h2>
+                <p class="text-gray-300 text-center">
+                    You've finished this story with {{ story.total_chapters }} chapter{{ story.total_chapters|pluralize }}.
+                </p>
             </div>
-        </div>
+        {% else %}
+            <!-- Continue Writing or Mark Complete -->
+            <div class="bg-gradient-to-r from-green-500 to-teal-600 rounded-lg shadow-lg p-8 mb-8 text-white">
+                {% if story.planned_chapters and story.total_chapters >= story.planned_chapters %}
+                    <!-- Story reached planned chapters - show Mark Complete option -->
+                    <h2 class="text-2xl font-bold mb-2">Story Reached Planned Length!</h2>
+                    <p class="text-green-100 mb-6">
+                        You've written {{ story.total_chapters }} of {{ story.planned_chapters }} planned chapters. Mark this story as complete or continue writing.
+                    </p>
+                    <div class="text-center space-x-4">
+                        <form method="post" action="{% url 'stories:mark_complete' story.slug %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                                Mark as Complete
+                            </button>
+                        </form>
+                        <a href="{% url 'stories:continue_personal_story' story.slug %}" class="inline-block bg-green-700 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition">
+                            Continue Writing
+                        </a>
+                    </div>
+                {% else %}
+                    <!-- Normal continue writing -->
+                    <h2 class="text-2xl font-bold mb-2">Continue Your Story</h2>
+                    <p class="text-green-100 mb-6">
+                        Write what happens next in Chapter {{ story.current_chapter_number }}. {% if story.planned_chapters %}({{ story.total_chapters }} of {{ story.planned_chapters }} chapters written){% endif %}
+                    </p>
+                    <div class="text-center">
+                        <a href="{% url 'stories:continue_personal_story' story.slug %}" class="inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            {% if chapters %}Continue Writing{% else %}Start Writing Chapter 1{% endif %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
     {% endif %}
 {% endif %}
 
