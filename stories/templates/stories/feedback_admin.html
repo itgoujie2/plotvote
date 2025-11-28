@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Feedback Admin - PlotVote{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Feedback & Bug Reports</h1>
+        <p class="text-gray-600">Manage user feedback and bug reports</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div class="flex items-center gap-6">
+            <!-- Status Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Status:</label>
+                <div class="flex gap-2 flex-wrap">
+                    <a href="?status=all&type={{ type_filter }}" class="px-4 py-2 rounded-lg text-sm font-medium {% if status_filter == 'all' %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        All ({{ status_counts.all }})
+                    </a>
+                    <a href="?status=new&type={{ type_filter }}" class="px-4 py-2 rounded-lg text-sm font-medium {% if status_filter == 'new' %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        New ({{ status_counts.new }})
+                    </a>
+                    <a href="?status=in_progress&type={{ type_filter }}" class="px-4 py-2 rounded-lg text-sm font-medium {% if status_filter == 'in_progress' %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        In Progress ({{ status_counts.in_progress }})
+                    </a>
+                    <a href="?status=resolved&type={{ type_filter }}" class="px-4 py-2 rounded-lg text-sm font-medium {% if status_filter == 'resolved' %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        Resolved ({{ status_counts.resolved }})
+                    </a>
+                    <a href="?status=closed&type={{ type_filter }}" class="px-4 py-2 rounded-lg text-sm font-medium {% if status_filter == 'closed' %}bg-indigo-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        Closed ({{ status_counts.closed }})
+                    </a>
+                </div>
+            </div>
+
+            <!-- Type Filter -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Type:</label>
+                <select onchange="window.location.href='?status={{ status_filter }}&type=' + this.value" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                    <option value="all" {% if type_filter == 'all' %}selected{% endif %}>All Types</option>
+                    {% for value, label in type_choices %}
+                        <option value="{{ value }}" {% if type_filter == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback List -->
+    {% if feedbacks %}
+        <div class="space-y-4">
+            {% for feedback in feedbacks %}
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4
+                    {% if feedback.status == 'new' %}border-blue-500
+                    {% elif feedback.status == 'in_progress' %}border-yellow-500
+                    {% elif feedback.status == 'resolved' %}border-green-500
+                    {% else %}border-gray-500{% endif %}">
+
+                    <!-- Header -->
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="text-xs font-semibold px-2 py-1 rounded
+                                    {% if feedback.type == 'bug' %}bg-red-100 text-red-800
+                                    {% elif feedback.type == 'feature' %}bg-blue-100 text-blue-800
+                                    {% elif feedback.type == 'feedback' %}bg-green-100 text-green-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ feedback.get_type_display }}
+                                </span>
+                                <span class="text-xs font-semibold px-2 py-1 rounded
+                                    {% if feedback.status == 'new' %}bg-blue-100 text-blue-800
+                                    {% elif feedback.status == 'in_progress' %}bg-yellow-100 text-yellow-800
+                                    {% elif feedback.status == 'resolved' %}bg-green-100 text-green-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {{ feedback.get_status_display }}
+                                </span>
+                                <span class="text-sm text-gray-500">#{{ feedback.id }}</span>
+                            </div>
+                            <h3 class="text-lg font-semibold text-gray-900">{{ feedback.subject }}</h3>
+                            <p class="text-sm text-gray-500 mt-1">
+                                Submitted by
+                                {% if feedback.user %}
+                                    <strong>{{ feedback.user.username }}</strong>
+                                {% elif feedback.email %}
+                                    <strong>{{ feedback.email }}</strong>
+                                {% else %}
+                                    <strong>Anonymous</strong>
+                                {% endif %}
+                                on {{ feedback.created_at|date:"M d, Y g:i A" }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <p class="text-gray-700 whitespace-pre-wrap">{{ feedback.description }}</p>
+                    </div>
+
+                    <!-- Screenshot -->
+                    {% if feedback.screenshot %}
+                        <div class="mb-4">
+                            <p class="text-sm font-medium text-gray-700 mb-2">Screenshot:</p>
+                            <a href="{{ feedback.screenshot.url }}" target="_blank" class="inline-block">
+                                <img src="{{ feedback.screenshot.url }}" alt="Screenshot" class="max-w-md rounded-lg border border-gray-300 hover:opacity-90 transition">
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <!-- Admin Notes -->
+                    <div class="mb-4">
+                        <form method="post" class="space-y-3">
+                            {% csrf_token %}
+                            <input type="hidden" name="feedback_id" value="{{ feedback.id }}">
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Admin Notes:</label>
+                                <textarea
+                                    name="admin_notes"
+                                    rows="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
+                                    placeholder="Add internal notes..."
+                                >{{ feedback.admin_notes }}</textarea>
+                            </div>
+
+                            <div class="flex gap-3">
+                                <div class="flex-1">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Change Status:</label>
+                                    <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm">
+                                        {% for value, label in status_choices %}
+                                            <option value="{{ value }}" {% if feedback.status == value %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="flex items-end">
+                                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded-lg text-sm transition">
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+            <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+            </svg>
+            <p class="text-gray-500 text-lg">No feedback found with these filters.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

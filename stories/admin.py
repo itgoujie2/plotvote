@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Story, Chapter, Prompt, Vote, Comment
+from .models import Story, Chapter, Prompt, Vote, Comment, Feedback
 
 
 @admin.register(Story)
@@ -52,3 +52,28 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['created_at', 'chapter__story']
     search_fields = ['content', 'user__username', 'chapter__title']
     readonly_fields = ['created_at', 'updated_at']
+
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['id', 'type', 'subject', 'user', 'email', 'status', 'created_at']
+    list_filter = ['type', 'status', 'created_at']
+    search_fields = ['subject', 'description', 'user__username', 'email']
+    readonly_fields = ['created_at', 'updated_at']
+    list_editable = ['status']
+
+    fieldsets = (
+        ('Feedback Information', {
+            'fields': ('type', 'subject', 'description', 'screenshot')
+        }),
+        ('User Information', {
+            'fields': ('user', 'email')
+        }),
+        ('Admin', {
+            'fields': ('status', 'admin_notes')
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )

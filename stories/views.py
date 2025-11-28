@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Count, Q
-from .models import Story, Chapter, Prompt, Vote, Comment
+from .models import Story, Chapter, Prompt, Vote, Comment, Feedback
 from .ai_generator import generate_chapter
 from users.models import CreditTransaction
 
@@ -571,3 +571,88 @@ def credits_dashboard(request):
         'packages': packages,
     }
     return render(request, 'stories/credits_dashboard.html', context)
+
+
+def submit_feedback(request):
+    """Submit feedback or bug report"""
+    if request.method == 'POST':
+        feedback = Feedback()
+
+        # Save user if authenticated
+        if request.user.is_authenticated:
+            feedback.user = request.user
+        else:
+            # Save email for non-authenticated users
+            feedback.email = request.POST.get('email', '')
+
+        feedback.type = request.POST.get('type', 'feedback')
+        feedback.subject = request.POST.get('subject', '')
+        feedback.description = request.POST.get('description', '')
+
+        # Handle screenshot upload
+        if request.FILES.get('screenshot'):
+            feedback.screenshot = request.FILES['screenshot']
+
+        feedback.save()
+
+        messages.success(request, 'Thank you for your feedback! We will review it soon.')
+        return redirect('stories:submit_feedback')
+
+    return render(request, 'stories/submit_feedback.html')
+
+
+@login_required
+def feedback_admin(request):
+    """Admin view to manage feedback submissions"""
+    # Only allow staff/superusers
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect('stories:homepage')
+
+    # Handle status updates
+    if request.method == 'POST':
+        feedback_id = request.POST.get('feedback_id')
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+
+        # Update status
+        if 'status' in request.POST:
+            feedback.status = request.POST.get('status')
+
+        # Update admin notes
+        if 'admin_notes' in request.POST:
+            feedback.admin_notes = request.POST.get('admin_notes')
+
+        feedback.save()
+        messages.success(request, f'Feedback #{feedback.id} updated successfully.')
+        return redirect('stories:feedback_admin')
+
+    # Filter feedbacks
+    status_filter = request.GET.get('status', 'all')
+    type_filter = request.GET.get('type', 'all')
+
+    feedbacks = Feedback.objects.all()
+
+    if status_filter != 'all':
+        feedbacks = feedbacks.filter(status=status_filter)
+
+    if type_filter != 'all':
+        feedbacks = feedbacks.filter(type=type_filter)
+
+    # Get counts for filters
+    status_counts = {
+        'all': Feedback.objects.count(),
+        'new': Feedback.objects.filter(status='new').count(),
+        'in_progress': Feedback.objects.filter(status='in_progress').count(),
+        'resolved': Feedback.objects.filter(status='resolved').count(),
+        'closed': Feedback.objects.filter(status='closed').count(),
+    }
+
+    context = {
+        'feedbacks': feedbacks,
+        'status_filter': status_filter,
+        'type_filter': type_filter,
+        'status_counts': status_counts,
+        'status_choices': Feedback.STATUS_CHOICES,
+        'type_choices': Feedback.TYPE_CHOICES,
+    }
+    return render(request, 'stories/feedback_admin.html', context)

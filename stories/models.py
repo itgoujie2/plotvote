@@ -338,3 +338,44 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} on {self.chapter}"
+
+
+class Feedback(models.Model):
+    """User feedback and bug reports"""
+
+    STATUS_CHOICES = [
+        ('new', 'New'),
+        ('in_progress', 'In Progress'),
+        ('resolved', 'Resolved'),
+        ('closed', 'Closed'),
+    ]
+
+    TYPE_CHOICES = [
+        ('bug', 'Bug Report'),
+        ('feature', 'Feature Request'),
+        ('feedback', 'General Feedback'),
+        ('other', 'Other'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='feedbacks')
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='feedback')
+    subject = models.CharField(max_length=200)
+    description = models.TextField()
+    screenshot = models.ImageField(upload_to='feedback_screenshots/', null=True, blank=True)
+
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
+    admin_notes = models.TextField(blank=True)
+
+    # Contact info for non-authenticated users
+    email = models.EmailField(blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = 'Feedback'
+
+    def __str__(self):
+        username = self.user.username if self.user else self.email or 'Anonymous'
+        return f"{self.get_type_display()} - {self.subject} ({username})"

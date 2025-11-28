@@ -28,4 +28,8 @@ urlpatterns = [
 
     # Credits
     path('credits/', views.credits_dashboard, name='credits_dashboard'),
+
+    # Feedback
+    path('feedback/', views.submit_feedback, name='submit_feedback'),
+    path('feedback/admin/', views.feedback_admin, name='feedback_admin'),
 ]
