@@ -180,43 +180,54 @@ def stripe_webhook(request):
         event = stripe.Webhook.construct_event(
             payload, sig_header, webhook_secret
         )
-    except ValueError:
+    except ValueError as e:
         # Invalid payload
+        print(f'Webhook error - Invalid payload: {e}')
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
-        # Invalid signature
+    except Exception as e:
+        # Invalid signature or other error
+        print(f'Webhook error - Signature verification failed: {e}')
         return HttpResponse(status=400)
 
     # Handle the checkout.session.completed event
+    print(f'Webhook received: {event["type"]}')
+
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
+        print(f'Processing checkout session: {session["id"]}')
 
         # Get purchase record
         purchase = Purchase.objects.filter(
             stripe_checkout_session_id=session['id']
         ).first()
 
-        if purchase and purchase.status == 'pending':
-            # Update purchase
-            purchase.stripe_payment_intent_id = session.get('payment_intent', '')
-            purchase.status = 'completed'
-            purchase.completed_at = timezone.now()
-            purchase.save()
+        if purchase:
+            print(f'Found purchase: {purchase.id} - Status: {purchase.status}')
+            if purchase.status == 'pending':
+                # Update purchase
+                purchase.stripe_payment_intent_id = session.get('payment_intent', '')
+                purchase.status = 'completed'
+                purchase.completed_at = timezone.now()
+                purchase.save()
 
-            # Add credits to user
-            profile = purchase.user.profile
-            profile.add_credits(purchase.credits, source='purchased')
+                # Add credits to user
+                profile = purchase.user.profile
+                profile.add_credits(purchase.credits, source='purchased')
 
-            # Record transaction
-            CreditTransaction.objects.create(
-                user=purchase.user,
-                amount=purchase.credits,
-                transaction_type='purchase',
-                description=f'Purchased {purchase.package.name} package',
-                balance_after=profile.credits
-            )
+                # Record transaction
+                CreditTransaction.objects.create(
+                    user=purchase.user,
+                    amount=purchase.credits,
+                    transaction_type='purchase',
+                    description=f'Purchased {purchase.package.name} package',
+                    balance_after=profile.credits
+                )
 
-            print(f'Credits added: {purchase.user.username} received {purchase.credits} credits')
+                print(f'✓ Credits added: {purchase.user.username} received {purchase.credits} credits (new balance: {profile.credits})')
+            else:
+                print(f'Purchase already processed (status: {purchase.status})')
+        else:
+            print(f'⚠ No purchase found for session: {session["id"]}')
 
     return HttpResponse(status=200)
 
