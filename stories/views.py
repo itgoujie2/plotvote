@@ -149,8 +149,8 @@ def submit_prompt(request, slug):
 
         if not prompt_text:
             messages.error(request, 'Prompt cannot be empty.')
-        elif len(prompt_text) > 500:
-            messages.error(request, 'Prompt must be 500 characters or less.')
+        elif len(prompt_text) > 3000:
+            messages.error(request, 'Prompt must be 3000 characters or less.')
         elif existing_prompt:
             messages.error(request, 'You already submitted a prompt for this chapter.')
         else:
@@ -413,8 +413,8 @@ def continue_personal_story(request, slug):
 
         if not prompt_text:
             messages.error(request, 'Prompt cannot be empty.')
-        elif len(prompt_text) > 1000:
-            messages.error(request, 'Prompt must be 1000 characters or less.')
+        elif len(prompt_text) > 3000:
+            messages.error(request, 'Prompt must be 3000 characters or less.')
         else:
             # Check if user has enough credits
             profile = request.user.profile

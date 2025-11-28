@@ -119,12 +119,30 @@ Previous chapters summary:
 
     def _create_system_prompt(self, story, context):
         """Create system prompt for the AI"""
+        # Include story framework for consistency
+        framework_context = story.get_story_framework_context()
+
         return f"""You are a creative fiction writer specializing in {story.get_genre_display()} stories.
 
-Story Title: {story.title}
-Genre: {story.get_genre_display()}
+{"=" * 70}
+STORY FRAMEWORK (maintain consistency with these details)
+{"=" * 70}
+
+{framework_context}
+
+{"=" * 70}
+PREVIOUS CHAPTERS CONTEXT
+{"=" * 70}
 
 {context}
+
+CRITICAL GUIDELINES:
+- **MAINTAIN STRICT CONSISTENCY** with the Story Framework provided (characters, plot outline, world rules)
+- Reference characters by their established names and traits
+- Follow the story outline and planned story arc
+- Respect the world building rules (magic system, technology, setting, etc.)
+- Match the themes and tone specified in the framework
+- If character details are provided, use them exactly as described
 
 Your task is to continue this story in a way that:
 1. Maintains consistency with established characters and plot

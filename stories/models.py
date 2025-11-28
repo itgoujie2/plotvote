@@ -271,8 +271,8 @@ class Prompt(models.Model):
 
     chapter_number = models.PositiveIntegerField(help_text="Which chapter this prompt is for")
     prompt_text = models.TextField(
-        max_length=500,
-        help_text="What should happen in the next chapter? (max 500 characters)"
+        max_length=3000,
+        help_text="What should happen in the next chapter? (max 3000 characters)"
     )
 
     vote_count = models.IntegerField(default=0, help_text="Cached vote count for performance")
