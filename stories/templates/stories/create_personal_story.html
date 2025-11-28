@@ -14,50 +14,228 @@
 
         <!-- Quick Start Guide -->
         <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-            <h3 class="font-semibold text-blue-900 mb-3 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            <button
+                type="button"
+                onclick="toggleGuide()"
+                class="w-full flex items-center justify-between mb-4"
+            >
+                <h3 class="font-semibold text-blue-900 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                    </svg>
+                    Quick Start Guide - See Complete Example
+                </h3>
+                <svg id="guide-chevron" class="w-5 h-5 text-blue-700 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
-                Quick Start Guide
-            </h3>
-            <p class="text-sm text-blue-900 mb-4">
-                Not sure where to start? Here's a simple example:
-            </p>
+            </button>
 
-            <div class="bg-white rounded-lg p-4 space-y-3 text-sm">
-                <div>
-                    <span class="font-semibold text-gray-900">Title:</span>
-                    <span class="text-gray-700"> "The Last Signal from Europa"</span>
-                </div>
-                <div>
-                    <span class="font-semibold text-gray-900">Story Premise:</span>
-                    <p class="text-gray-700 mt-1">
-                        "Dr. Sarah Chen receives an encrypted distress signal from the Europa Research Station—a facility she helped design five years ago. The station has been silent for three months, and the signal contains her biometric signature. As she decodes the message, she discovers it's not a cry for help, but a warning: 'Don't send anyone. Don't come looking. I'm already dead.' The problem? The message was sent yesterday, and Sarah has been on Earth the entire time."
-                    </p>
-                </div>
-                <div>
-                    <span class="font-semibold text-gray-900">Genre:</span>
-                    <span class="text-gray-700"> Science Fiction</span>
-                    <span class="mx-2">•</span>
-                    <span class="font-semibold text-gray-900">Language:</span>
-                    <span class="text-gray-700"> English</span>
-                    <span class="mx-2">•</span>
-                    <span class="font-semibold text-gray-900">Chapters:</span>
-                    <span class="text-gray-700"> 10</span>
-                </div>
-            </div>
+            <div id="guide-section">
+                <p class="text-sm text-blue-900 mb-4">
+                    Not sure where to start? Here's a complete example of a well-structured story:
+                </p>
 
-            <div class="mt-4 pt-4 border-t border-blue-200">
-                <div class="flex items-start justify-between gap-4">
+                <div class="bg-white rounded-lg p-4 space-y-4 text-sm">
+                    <!-- Basic Fields -->
+                    <div class="pb-4 border-b border-gray-200">
+                        <div class="mb-3">
+                            <span class="font-semibold text-gray-900">Title:</span>
+                            <span class="text-gray-700"> "The Last Signal from Europa"</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-semibold text-gray-900">Story Premise:</span>
+                            <p class="text-gray-700 mt-1">
+                                "Dr. Sarah Chen receives an encrypted distress signal from the Europa Research Station—a facility she helped design five years ago. The station has been silent for three months, and the signal contains her biometric signature. As she decodes the message, she discovers it's not a cry for help, but a warning: 'Don't send anyone. Don't come looking. I'm already dead.' The problem? The message was sent yesterday, and Sarah has been on Earth the entire time."
+                            </p>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-gray-900">Genre:</span>
+                            <span class="text-gray-700"> Science Fiction</span>
+                            <span class="mx-2">•</span>
+                            <span class="font-semibold text-gray-900">Language:</span>
+                            <span class="text-gray-700"> English</span>
+                            <span class="mx-2">•</span>
+                            <span class="font-semibold text-gray-900">Chapters:</span>
+                            <span class="text-gray-700"> 10</span>
+                        </div>
+                    </div>
+
+                    <!-- Story Framework Examples -->
+                    <div class="space-y-4">
+                        <h4 class="font-semibold text-gray-900">Story Framework (Optional but Recommended):</h4>
+
+                        <!-- Characters -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">Main Characters:</span>
+                                <button type="button" onclick="copyToClipboard('characters-example')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    Copy
+                                </button>
+                            </div>
+                            <pre id="characters-example" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">Dr. Sarah Chen (Protagonist)
+- 42-year-old astrobiologist, former Europa mission lead
+- Brilliant but haunted by the loss of her research team
+- Analytical, determined, uses dark humor as coping mechanism
+
+Dr. James Rivera (Ally/Deuteragonist)
+- 38-year-old quantum communications specialist
+- Was Sarah's closest friend on the Europa mission
+- Skeptical but loyal, provides technical expertise
+
+Commander Elena Volkov (Authority Figure)
+- 55-year-old director of International Space Research Facility
+- Former cosmonaut, no-nonsense leadership style
+- Maternal figure who mentored Sarah</pre>
+                        </div>
+
+                        <!-- Story Outline -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">Story Outline:</span>
+                                <button type="button" onclick="copyToClipboard('outline-example')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    Copy
+                                </button>
+                            </div>
+                            <pre id="outline-example" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">Act 1 - The Mystery (Chapters 1-3):
+- Sarah receives impossible signal from Europa
+- Working with James and Elena, discovers signal is from herself
+- Flashbacks reveal the Europa mission and alien intelligence discovery
+- Marcus Reeves (Helios Corp) arrives with hidden agenda
+
+Act 2 - The Truth (Chapters 4-7):
+- Sarah infiltrates Iceland facility, discovers consciousness transfer tech
+- Realizes she's a "copy" with implanted memories
+- Finds James and Yuki—they're copies too
+- Team confronts truth: originals still on Europa, merged with alien intelligence
+
+Act 3 - The Choice (Chapters 8-10):
+- Full message decoded: originals offering choice to integrate memories
+- Marcus captures team, forcing Sarah to choose
+- Sarah integrates memories, accepting dual existence
+- Final confrontation: expose Helios, return consciousness to Europa
+- Resolution: Sarah becomes bridge between humanity and alien intelligence</pre>
+                        </div>
+
+                        <!-- World Building -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">World Building:</span>
+                                <button type="button" onclick="copyToClipboard('worldbuilding-example')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    Copy
+                                </button>
+                            </div>
+                            <pre id="worldbuilding-example" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">Time Period: 2089 (Near future)
+
+Technology:
+- Quantum communication enables near-instant messaging
+- Consciousness can be digitized and transmitted as data
+- Neural mapping allows perfect replication of consciousness
+
+Key Locations:
+- International Space Research Facility (Iceland)
+- Europa Research Station (underwater, beneath ice shell)
+- Helios Corporation Secret Facility (hidden in glacier)
+
+Rules of Consciousness Transfer:
+- Consciousness can be copied, creating identical duplicates
+- Copies have all memories up to mapping point
+- Original and copy are separate entities
+- Substrate doesn't matter - consciousness is transferable</pre>
+                        </div>
+
+                        <!-- Themes -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">Themes & Tone:</span>
+                                <button type="button" onclick="copyToClipboard('themes-example')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    Copy
+                                </button>
+                            </div>
+                            <pre id="themes-example" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">Primary Themes:
+- Identity and consciousness: What makes you "you"?
+- The price of scientific discovery
+- Corporate greed vs. scientific integrity
+- Grief and acceptance
+
+Tone:
+- Tense and mysterious with building dread
+- Moments of cosmic horror
+- Emotional depth in character relationships
+- Philosophical without being preachy
+- Hopeful despite dark themes</pre>
+                        </div>
+
+                        <!-- Writing Style -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">Writing Style:</span>
+                                <button type="button" onclick="copyToClipboard('style-example')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    Copy
+                                </button>
+                            </div>
+                            <pre id="style-example" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">Narrative Perspective:
+- Third person limited, primarily from Sarah's POV
+- Occasional shifts to James or Yuki for specific scenes
+
+Pacing:
+- Hook readers immediately with mystery in Chapter 1
+- Alternate between present investigation and past events
+- Each chapter ends with hook or revelation
+- 800-1200 words per chapter
+
+Tone Guidelines:
+- Sarah uses dark humor to deflect emotions
+- Technical jargon should feel natural, not forced
+- Balance action, investigation, and character moments</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-blue-200 flex items-center justify-between gap-4">
                     <p class="text-sm text-blue-900 flex-1">
-                        <strong>💡 Tip:</strong> The Story Framework section (below) is optional, but filling it out helps AI maintain consistency across chapters. Think of it as your story bible!
+                        <strong>💡 Tip:</strong> Copy any section above and paste into the corresponding field below!
                     </p>
                     <a href="/story/the-last-signal-from-europa/" target="_blank" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-4 py-2 rounded-lg transition whitespace-nowrap">
-                        View Example Story →
+                        View Finished Story →
                     </a>
                 </div>
             </div>
         </div>
+
+        <script>
+            function toggleGuide() {
+                const section = document.getElementById('guide-section');
+                const chevron = document.getElementById('guide-chevron');
+
+                if (section.classList.contains('hidden')) {
+                    section.classList.remove('hidden');
+                    chevron.classList.add('rotate-180');
+                } else {
+                    section.classList.add('hidden');
+                    chevron.classList.remove('rotate-180');
+                }
+            }
+
+            function copyToClipboard(elementId) {
+                const element = document.getElementById(elementId);
+                const text = element.textContent;
+
+                navigator.clipboard.writeText(text).then(() => {
+                    // Show feedback
+                    const btn = event.target;
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.classList.add('bg-green-100', 'text-green-700');
+                    btn.classList.remove('bg-gray-100', 'text-gray-700');
+
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.classList.remove('bg-green-100', 'text-green-700');
+                        btn.classList.add('bg-gray-100', 'text-gray-700');
+                    }, 2000);
+                });
+            }
+        </script>
 
         <form method="post" class="space-y-6">
             {% csrf_token %}
