@@ -12,23 +12,30 @@ from users.models import CreditTransaction
 
 
 def homepage(request):
-    """Homepage showing active stories and pitched stories (collaborative only)"""
+    """Homepage showing active stories, completed stories, and pitched stories (collaborative only)"""
     # Get language filter from query params
     language_filter = request.GET.get('language', '')
 
     # Base querysets - only show collaborative stories on homepage
     active_stories_qs = Story.objects.filter(status='active', story_type='collaborative')
+    completed_stories_qs = Story.objects.filter(status='completed', story_type='collaborative')
     pitched_stories_qs = Story.objects.filter(status='pitch', story_type='collaborative')
 
     # Apply language filter if specified
     if language_filter:
         active_stories_qs = active_stories_qs.filter(language=language_filter)
+        completed_stories_qs = completed_stories_qs.filter(language=language_filter)
         pitched_stories_qs = pitched_stories_qs.filter(language=language_filter)
 
     # Active stories (ready for chapter prompts)
     active_stories = active_stories_qs.annotate(
         subscriber_count_annotated=Count('subscribers')
     ).order_by('-is_featured', '-created_at')
+
+    # Completed stories (finished stories for reading)
+    completed_stories = completed_stories_qs.annotate(
+        subscriber_count_annotated=Count('subscribers')
+    ).order_by('-updated_at')[:6]  # Latest 6 completed stories
 
     # Pitched stories (community voting)
     pitched_stories = pitched_stories_qs.annotate(
@@ -37,6 +44,7 @@ def homepage(request):
 
     context = {
         'active_stories': active_stories,
+        'completed_stories': completed_stories,
         'pitched_stories': pitched_stories,
         'language_choices': Story.LANGUAGE_CHOICES,
         'selected_language': language_filter,

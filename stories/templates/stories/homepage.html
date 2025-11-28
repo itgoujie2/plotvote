@@ -193,8 +193,11 @@ function filterByLanguage(language) {
 </div>
 
 <!-- Active Stories -->
-<div class="mb-8">
-    <h2 class="text-3xl font-bold text-gray-900 mb-6">Active Stories</h2>
+<div class="mb-12">
+    <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Active Stories</h2>
+        <p class="text-gray-600">Submit your prompts and vote on what happens next! These stories are actively accepting community ideas.</p>
+    </div>
 
     {% if active_stories %}
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -209,6 +212,7 @@ function filterByLanguage(language) {
                     {% endif %}
 
                     <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-800 rounded">ACCEPTING PROMPTS</span>
                         <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-800 rounded">{{ story.get_genre_display }}</span>
                         {% if story.is_featured %}
                             <span class="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded">Featured</span>
@@ -229,6 +233,53 @@ function filterByLanguage(language) {
         <div class="bg-white rounded-lg shadow-sm p-12 text-center">
             <p class="text-gray-600 text-lg mb-4">No active stories yet.</p>
             <p class="text-gray-500">Upvote pitches to activate them!</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Completed Stories -->
+<div class="mb-12">
+    <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Completed Stories</h2>
+        <p class="text-gray-600">Finished stories ready to read from beginning to end.</p>
+    </div>
+
+    {% if completed_stories %}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for story in completed_stories %}
+                <a href="{% url 'stories:story_detail' story.slug %}" class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 block">
+                    {% if story.cover_image %}
+                        <img src="{{ story.cover_image.url }}" alt="{{ story.title }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                    {% else %}
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-600 to-gray-800 rounded-lg mb-4 flex items-center justify-center">
+                            <span class="text-white text-4xl font-bold">{{ story.title|slice:":1" }}</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xs font-semibold px-2 py-1 bg-gray-100 text-gray-800 rounded flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            COMPLETED
+                        </span>
+                        <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-800 rounded">{{ story.get_genre_display }}</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ story.title }}</h3>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ story.description }}</p>
+
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                        <span>{{ story.total_chapters }} chapter{{ story.total_chapters|pluralize }}</span>
+                        <span>{{ story.subscriber_count }} subscriber{{ story.subscriber_count|pluralize }}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+            <p class="text-gray-600 text-lg mb-4">No completed stories yet.</p>
+            <p class="text-gray-500">Check back soon for finished stories!</p>
         </div>
     {% endif %}
 </div>
