@@ -10,7 +10,54 @@
 
     <div class="bg-white rounded-lg shadow-sm p-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Personal Story</h1>
-        <p class="text-gray-600 mb-8">Start a new story that you can write chapter by chapter using AI</p>
+        <p class="text-gray-600 mb-6">Start a new story that you can write chapter by chapter using AI</p>
+
+        <!-- Quick Start Guide -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+            <h3 class="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+                Quick Start Guide
+            </h3>
+            <p class="text-sm text-blue-900 mb-4">
+                Not sure where to start? Here's a simple example:
+            </p>
+
+            <div class="bg-white rounded-lg p-4 space-y-3 text-sm">
+                <div>
+                    <span class="font-semibold text-gray-900">Title:</span>
+                    <span class="text-gray-700"> "The Last Signal from Europa"</span>
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-900">Story Premise:</span>
+                    <p class="text-gray-700 mt-1">
+                        "Dr. Sarah Chen receives an encrypted distress signal from the Europa Research Station—a facility she helped design five years ago. The station has been silent for three months, and the signal contains her biometric signature. As she decodes the message, she discovers it's not a cry for help, but a warning: 'Don't send anyone. Don't come looking. I'm already dead.' The problem? The message was sent yesterday, and Sarah has been on Earth the entire time."
+                    </p>
+                </div>
+                <div>
+                    <span class="font-semibold text-gray-900">Genre:</span>
+                    <span class="text-gray-700"> Science Fiction</span>
+                    <span class="mx-2">•</span>
+                    <span class="font-semibold text-gray-900">Language:</span>
+                    <span class="text-gray-700"> English</span>
+                    <span class="mx-2">•</span>
+                    <span class="font-semibold text-gray-900">Chapters:</span>
+                    <span class="text-gray-700"> 10</span>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-blue-200">
+                <div class="flex items-start justify-between gap-4">
+                    <p class="text-sm text-blue-900 flex-1">
+                        <strong>💡 Tip:</strong> The Story Framework section (below) is optional, but filling it out helps AI maintain consistency across chapters. Think of it as your story bible!
+                    </p>
+                    <a href="/story/the-last-signal-from-europa/" target="_blank" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-4 py-2 rounded-lg transition whitespace-nowrap">
+                        View Example Story →
+                    </a>
+                </div>
+            </div>
+        </div>
 
         <form method="post" class="space-y-6">
             {% csrf_token %}
