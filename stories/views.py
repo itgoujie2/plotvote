@@ -576,35 +576,43 @@ def credits_dashboard(request):
 def submit_feedback(request):
     """Submit feedback or bug report"""
     if request.method == 'POST':
-        # Validate required fields
-        subject = request.POST.get('subject', '').strip()
-        description = request.POST.get('description', '').strip()
+        try:
+            # Validate required fields
+            subject = request.POST.get('subject', '').strip()
+            description = request.POST.get('description', '').strip()
 
-        if not subject or not description:
-            messages.error(request, 'Subject and description are required.')
+            if not subject or not description:
+                messages.error(request, 'Subject and description are required.')
+                return render(request, 'stories/submit_feedback.html')
+
+            feedback = Feedback()
+
+            # Save user if authenticated
+            if request.user.is_authenticated:
+                feedback.user = request.user
+            else:
+                # Save email for non-authenticated users
+                feedback.email = request.POST.get('email', '')
+
+            feedback.type = request.POST.get('type', 'feedback')
+            feedback.subject = subject
+            feedback.description = description
+
+            # Handle screenshot upload
+            if request.FILES.get('screenshot'):
+                feedback.screenshot = request.FILES['screenshot']
+
+            feedback.save()
+
+            messages.success(request, 'Thank you for your feedback! We will review it soon.')
+            return redirect('stories:submit_feedback')
+
+        except Exception as e:
+            print(f"ERROR in submit_feedback: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            messages.error(request, f'An error occurred: {str(e)}')
             return render(request, 'stories/submit_feedback.html')
-
-        feedback = Feedback()
-
-        # Save user if authenticated
-        if request.user.is_authenticated:
-            feedback.user = request.user
-        else:
-            # Save email for non-authenticated users
-            feedback.email = request.POST.get('email', '')
-
-        feedback.type = request.POST.get('type', 'feedback')
-        feedback.subject = subject
-        feedback.description = description
-
-        # Handle screenshot upload
-        if request.FILES.get('screenshot'):
-            feedback.screenshot = request.FILES['screenshot']
-
-        feedback.save()
-
-        messages.success(request, 'Thank you for your feedback! We will review it soon.')
-        return redirect('stories:submit_feedback')
 
     return render(request, 'stories/submit_feedback.html')
 
