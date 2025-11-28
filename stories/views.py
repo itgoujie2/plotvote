@@ -576,6 +576,14 @@ def credits_dashboard(request):
 def submit_feedback(request):
     """Submit feedback or bug report"""
     if request.method == 'POST':
+        # Validate required fields
+        subject = request.POST.get('subject', '').strip()
+        description = request.POST.get('description', '').strip()
+
+        if not subject or not description:
+            messages.error(request, 'Subject and description are required.')
+            return render(request, 'stories/submit_feedback.html')
+
         feedback = Feedback()
 
         # Save user if authenticated
@@ -586,8 +594,8 @@ def submit_feedback(request):
             feedback.email = request.POST.get('email', '')
 
         feedback.type = request.POST.get('type', 'feedback')
-        feedback.subject = request.POST.get('subject', '')
-        feedback.description = request.POST.get('description', '')
+        feedback.subject = subject
+        feedback.description = description
 
         # Handle screenshot upload
         if request.FILES.get('screenshot'):
