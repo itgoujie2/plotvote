@@ -32,10 +32,31 @@
 
             <div id="guide-section" class="hidden">
                 <p class="text-sm text-blue-900 mb-4">
-                    Not sure where to start? Here's a complete example of a well-structured story:
+                    Not sure where to start? Here are two complete examples of well-structured stories:
                 </p>
 
-                <div class="bg-white rounded-lg p-4 space-y-4 text-sm">
+                <!-- Language Tabs -->
+                <div class="flex gap-2 mb-4">
+                    <button
+                        type="button"
+                        onclick="switchExample('english')"
+                        id="tab-english"
+                        class="px-4 py-2 rounded-lg font-medium bg-white text-blue-800 border-2 border-blue-800"
+                    >
+                        English Example (Sci-Fi)
+                    </button>
+                    <button
+                        type="button"
+                        onclick="switchExample('chinese')"
+                        id="tab-chinese"
+                        class="px-4 py-2 rounded-lg font-medium bg-blue-100 text-blue-700 border-2 border-transparent hover:bg-blue-200"
+                    >
+                        中文示例 (玄幻)
+                    </button>
+                </div>
+
+                <!-- English Example -->
+                <div id="example-english" class="bg-white rounded-lg p-4 space-y-4 text-sm">
                     <!-- Basic Fields -->
                     <div class="pb-4 border-b border-gray-200">
                         <div class="mb-3">
@@ -191,13 +212,224 @@ Tone Guidelines:
                     </div>
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-blue-200 flex items-center justify-between gap-4">
-                    <p class="text-sm text-blue-900 flex-1">
-                        <strong>💡 Tip:</strong> Copy any section above and paste into the corresponding field below!
-                    </p>
-                    <a href="/story/the-last-signal-from-europa/" target="_blank" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-4 py-2 rounded-lg transition whitespace-nowrap">
-                        View Finished Story →
-                    </a>
+                    <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between gap-4">
+                        <p class="text-sm text-blue-900 flex-1">
+                            <strong>💡 Tip:</strong> Copy any section above and paste into the corresponding field below!
+                        </p>
+                        <a href="/story/the-last-signal-from-europa/" target="_blank" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-4 py-2 rounded-lg transition whitespace-nowrap">
+                            View Finished Story →
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Chinese Example -->
+                <div id="example-chinese" class="bg-white rounded-lg p-4 space-y-4 text-sm hidden">
+                    <!-- Basic Fields -->
+                    <div class="pb-4 border-b border-gray-200">
+                        <div class="mb-3">
+                            <span class="font-semibold text-gray-900">标题 (Title):</span>
+                            <span class="text-gray-700"> "魔尊重生"</span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="font-semibold text-gray-900">故事简介 (Story Premise):</span>
+                            <p class="text-gray-700 mt-1">
+                                "林羽，天玄宗公认的废材弟子，灵根破碎，修为停滞在炼气期三年。在一次宗门试炼中，他意外跌入禁地深渊，本以为必死无疑，却在生死关头觉醒了前世记忆——他竟是三千年前横扫修真界的魔尊血煞。但重生后的他灵根尽毁，只能从头开始。更诡异的是，在禁地深处，他发现了一个被封印的女子。她浑身魔气缭绕，正是当今修真界人人喊打的魔教教主——司徒寒月。林羽本想离开，却被司徒寒月一眼看穿了前世身份。面对奄奄一息的司徒寒月，林羽犹豫了。救她，意味着与整个正道为敌；不救，她手中的《九幽魔典》就会随她而去，而那正是他恢复修为的唯一希望。最终，林羽选择救下了她。却不知，这个决定将彻底改变他的命运——司徒寒月不仅是魔教教主，更是封印他前世魔尊之力的关键。而那场三千年前的正魔大战，背后隐藏着比他记忆中更深的秘密..."
+                            </p>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-gray-900">类型 (Genre):</span>
+                            <span class="text-gray-700"> 玄幻 (Fantasy/Other)</span>
+                            <span class="mx-2">•</span>
+                            <span class="font-semibold text-gray-900">语言 (Language):</span>
+                            <span class="text-gray-700"> 中文 (Chinese)</span>
+                            <span class="mx-2">•</span>
+                            <span class="font-semibold text-gray-900">计划章节 (Chapters):</span>
+                            <span class="text-gray-700"> 30</span>
+                        </div>
+                    </div>
+
+                    <!-- Story Framework Examples -->
+                    <div class="space-y-4">
+                        <h4 class="font-semibold text-gray-900">故事框架 (Story Framework - Optional but Recommended):</h4>
+
+                        <!-- Characters -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">主要人物 (Main Characters):</span>
+                                <button type="button" onclick="copyToClipboard('characters-example-cn')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    复制 (Copy)
+                                </button>
+                            </div>
+                            <pre id="characters-example-cn" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">林羽（主角）
+- 18岁，天玄宗外门弟子
+- 表面：灵根破碎的废材，被同门欺凌
+- 真实身份：三千年前血煞魔尊转世，记忆觉醒
+- 性格：外表懦弱，内心坚韧果断；前世杀伐果断，今生多了几分人性
+- 目标：恢复修为，查明前世被围剿的真相
+
+司徒寒月（女主）
+- 26岁，幽冥魔教现任教主
+- 修为：元婴后期（受伤跌落至金丹期）
+- 容貌：绝世倾城，一袭黑衣，气质冷艳
+- 性格：冷酷无情，却对林羽前世有着复杂情感
+- 秘密：她是封印血煞魔尊的关键，体内有魔尊一半的力量
+
+苏清歌
+- 17岁，天玄宗天才弟子，金丹初期
+- 天灵根，宗门重点培养对象
+- 性格：表面温柔善良，内心高傲，瞧不起废材弟子
+- 与林羽：曾经的青梅竹马，林羽灵根破碎后疏远</pre>
+                        </div>
+
+                        <!-- Story Outline -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">故事大纲 (Story Outline):</span>
+                                <button type="button" onclick="copyToClipboard('outline-example-cn')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    复制 (Copy)
+                                </button>
+                            </div>
+                            <pre id="outline-example-cn" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">第一幕 - 觉醒（1-5章）
+- 林羽在宗门试炼中被陷害，跌入禁地
+- 生死关头觉醒前世记忆，发现自己是血煞魔尊转世
+- 遇到被封印的司徒寒月，经过内心挣扎后选择救她
+- 司徒寒月认出林羽前世身份，但装作不知
+- 两人达成协议：司徒寒月教他《九幽魔典》，林羽帮她恢复修为
+- 回到宗门，林羽发现陷害他的是莫凡
+- 开始秘密修炼魔道功法，同时隐藏实力
+
+第二幕 - 崛起（6-15章）
+- 林羽修为突破筑基期，震惊宗门
+- 参加宗门大比，击败欺凌者，名声鹊起
+- 司徒寒月恢复部分修为，暗中帮助林羽
+- 林羽发现苏清歌被魔教掳走，决定营救
+- 深入魔教总部，发现魔教并非想象中邪恶
+- 揭露莫凡是内鬼，发现天玄宗高层与魔教勾结
+- 司徒寒月向林羽坦白：她体内封印着他前世一半的力量
+
+第三幕 - 真相（16-25章）
+- 林羽和司徒寒月游历修真界，寻找前世线索
+- 发现三千年前的正魔大战是一场阴谋
+- 各大正道宗门联手封印魔尊，是为了夺取"成仙之秘"
+- 林羽修为突破元婴期，吸引各方势力追杀
+- 司徒寒月为保护林羽受重伤，解除体内封印
+- 林羽恢复前世部分力量，但发现力量中蕴含的记忆
+- 真相：司徒寒月前世是他的道侣，为了救他甘愿成为封印
+
+第四幕 - 抉择（26-30章）
+- 林羽突破化神期，正式恢复魔尊身份
+- 正魔两道同时视他为威胁
+- 揭露"成仙之秘"真相：需要融合正魔之力
+- 玄机真人暴露真面目，原是远古魔神分身
+- 林羽与司徒寒月联手对抗真正的敌人
+- 牺牲与成长：为了拯救修真界，必须放下前世执念
+- 结局：开启新的修真时代，正魔不再对立</pre>
+                        </div>
+
+                        <!-- World Building -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">世界设定 (World Building):</span>
+                                <button type="button" onclick="copyToClipboard('worldbuilding-example-cn')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    复制 (Copy)
+                                </button>
+                            </div>
+                            <pre id="worldbuilding-example-cn" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">修为境界：
+1. 炼气期（1-12层）
+2. 筑基期（初/中/后期）
+3. 金丹期（初/中/后期）
+4. 元婴期（初/中/后期）
+5. 化神期（初/中/后期）
+6. 渡劫期
+7. 大乘期
+8. 仙人
+
+主要势力：
+正道三大宗门：
+- 天玄宗：最强正道宗门，以剑修为主
+- 灵霄派：擅长阵法和炼器
+- 天机阁：以推演天机、炼丹闻名
+
+魔道势力：
+- 幽冥魔教：最大魔道组织，修炼魔功
+- 血煞殿：林羽前世创立，已覆灭
+- 散修魔道：不属于任何组织的魔道修士
+
+重要地点：
+- 天玄宗：位于云霄山脉，仙气缭绕
+- 幽冥谷：魔教总部，终年黑雾弥漫
+- 禁地深渊：封印司徒寒月之地，危机重重
+- 上古战场：三千年前正魔大战遗迹
+- 成仙之门：传说中通往仙界的通道</pre>
+                        </div>
+
+                        <!-- Themes -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">主题与基调 (Themes & Tone):</span>
+                                <button type="button" onclick="copyToClipboard('themes-example-cn')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    复制 (Copy)
+                                </button>
+                            </div>
+                            <pre id="themes-example-cn" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">核心主题：
+- 正邪对立的虚妄：探讨正道未必正，魔道未必邪
+- 前世今生的羁绊：林羽与司徒寒月跨越三千年的情感
+- 命运与选择：废材逆袭，靠的是实力还是前世积累？
+- 权力的代价：获得力量必须付出什么？
+- 身份认同：他是林羽还是血煞魔尊？
+
+故事基调：
+- 前期：热血爽文，废材逆袭，打脸装逼
+- 中期：阴谋诡计，揭露真相，正邪博弈
+- 后期：史诗战斗，情感纠葛，终极抉择
+- 整体：有打斗有策略，有热血有情感，有反转有成长</pre>
+                        </div>
+
+                        <!-- Writing Style -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-semibold text-gray-900">写作风格 (Writing Style):</span>
+                                <button type="button" onclick="copyToClipboard('style-example-cn')" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-2 py-1 rounded">
+                                    复制 (Copy)
+                                </button>
+                            </div>
+                            <pre id="style-example-cn" class="text-xs text-gray-700 bg-gray-50 p-3 rounded border border-gray-200 overflow-x-auto whitespace-pre-wrap">叙事视角：
+- 第三人称，以林羽视角为主
+- 关键剧情切换到司徒寒月或反派视角
+- 前世回忆用第一人称，增强代入感
+
+节奏控制：
+- 每章800-1200字，适合手机阅读
+- 前三章快速建立世界观和冲突
+- 每章结尾留悬念或爆点
+- 战斗场面详细描写，心理活动简洁有力
+- 每5章一个小高潮，每10章一个大转折
+
+语言风格：
+- 使用修真小说常见术语（灵气、法宝、神识等）
+- 对话简洁有力，符合人物性格
+- 避免过度白话，保持一定古风韵味
+- 战斗描写干脆利落，不拖沓
+- 情感戏含蓄深沉，不过分煽情
+
+爽点设计：
+- 装逼打脸：废材身份 vs 隐藏实力
+- 越级战斗：以低境界击败高境界
+- 红颜知己：司徒寒月、苏清歌等女性角色的情感线
+- 宝物获得：古老传承、顶级法宝
+- 身份揭秘：魔尊身份暴露的震撼
+- 复仇爽快：报复曾经欺凌者</pre>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between gap-4">
+                        <p class="text-sm text-blue-900 flex-1">
+                            <strong>💡 提示：</strong> 复制上面任何部分并粘贴到下面相应的字段中！
+                        </p>
+                        <a href="/story/mo-zun-zhong-sheng/" target="_blank" class="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-4 py-2 rounded-lg transition whitespace-nowrap">
+                            查看完整故事 →
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -216,6 +448,36 @@ Tone Guidelines:
                 }
             }
 
+            function switchExample(language) {
+                // Toggle example sections
+                const englishExample = document.getElementById('example-english');
+                const chineseExample = document.getElementById('example-chinese');
+                const englishTab = document.getElementById('tab-english');
+                const chineseTab = document.getElementById('tab-chinese');
+
+                if (language === 'english') {
+                    // Show English, hide Chinese
+                    englishExample.classList.remove('hidden');
+                    chineseExample.classList.add('hidden');
+
+                    // Update tab styles
+                    englishTab.classList.add('bg-white', 'text-blue-800', 'border-blue-800');
+                    englishTab.classList.remove('bg-blue-100', 'text-blue-700', 'border-transparent');
+                    chineseTab.classList.add('bg-blue-100', 'text-blue-700', 'border-transparent');
+                    chineseTab.classList.remove('bg-white', 'text-blue-800', 'border-blue-800');
+                } else {
+                    // Show Chinese, hide English
+                    chineseExample.classList.remove('hidden');
+                    englishExample.classList.add('hidden');
+
+                    // Update tab styles
+                    chineseTab.classList.add('bg-white', 'text-blue-800', 'border-blue-800');
+                    chineseTab.classList.remove('bg-blue-100', 'text-blue-700', 'border-transparent');
+                    englishTab.classList.add('bg-blue-100', 'text-blue-700', 'border-transparent');
+                    englishTab.classList.remove('bg-white', 'text-blue-800', 'border-blue-800');
+                }
+            }
+
             function copyToClipboard(elementId) {
                 const element = document.getElementById(elementId);
                 const text = element.textContent;
@@ -224,7 +486,8 @@ Tone Guidelines:
                     // Show feedback
                     const btn = event.target;
                     const originalText = btn.textContent;
-                    btn.textContent = 'Copied!';
+                    const isChinese = originalText.includes('复制');
+                    btn.textContent = isChinese ? '已复制！' : 'Copied!';
                     btn.classList.add('bg-green-100', 'text-green-700');
                     btn.classList.remove('bg-gray-100', 'text-gray-700');
 
