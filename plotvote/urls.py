@@ -29,6 +29,9 @@ urlpatterns = [
     # Payment callbacks (need to be at root level for Stripe redirects)
     path('credits/success', user_views.payment_success, name='payment_success'),
     path('credits/cancel', user_views.payment_cancel, name='payment_cancel'),
+
+    # Stripe webhook (at root level)
+    path('webhooks/stripe/', user_views.stripe_webhook, name='stripe_webhook'),
 ]
 
 # Serve media files in development
