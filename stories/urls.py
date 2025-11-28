@@ -24,6 +24,7 @@ urlpatterns = [
     path('personal/<slug:slug>/continue/', views.continue_personal_story, name='continue_personal_story'),
     path('personal/<slug:slug>/publish/', views.publish_story, name='publish_story'),
     path('story/<slug:slug>/mark-complete/', views.mark_complete, name='mark_complete'),
+    path('story/<slug:slug>/publish-to-community/', views.publish_to_community, name='publish_to_community'),
 
     # Credits
     path('credits/', views.credits_dashboard, name='credits_dashboard'),

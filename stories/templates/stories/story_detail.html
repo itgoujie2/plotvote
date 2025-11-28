@@ -169,10 +169,19 @@
                     <p class="text-green-100 mb-6">
                         Write what happens next in Chapter {{ story.current_chapter_number }}. {% if story.planned_chapters %}({{ story.total_chapters }} of {{ story.planned_chapters }} chapters written){% endif %}
                     </p>
-                    <div class="text-center">
+                    <div class="text-center space-x-4">
                         <a href="{% url 'stories:continue_personal_story' story.slug %}" class="inline-block bg-white text-green-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
                             {% if chapters %}Continue Writing{% else %}Start Writing Chapter 1{% endif %}
                         </a>
+                        {% if chapters %}
+                            <!-- Only show publish option if at least 1 chapter exists -->
+                            <form method="post" action="{% url 'stories:publish_to_community' story.slug %}" class="inline" onsubmit="return confirm('Are you sure you want to publish this story to the community? Other users will be able to submit and vote on prompts for future chapters. This cannot be undone.');">
+                                {% csrf_token %}
+                                <button type="submit" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                                    Publish to Community
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
                 {% endif %}
             </div>

@@ -531,6 +531,32 @@ def mark_complete(request, slug):
 
 
 @login_required
+def publish_to_community(request, slug):
+    """Convert a personal story to collaborative story"""
+    if request.method != 'POST':
+        return redirect('stories:story_detail', slug=slug)
+
+    story = get_object_or_404(Story, slug=slug, created_by=request.user)
+
+    # Verify it's a personal story
+    if story.story_type != 'personal':
+        messages.error(request, 'Only personal stories can be published to the community.')
+        return redirect('stories:story_detail', slug=slug)
+
+    # Verify story has at least one chapter
+    if story.total_chapters == 0:
+        messages.error(request, 'You need to write at least one chapter before publishing to the community.')
+        return redirect('stories:story_detail', slug=slug)
+
+    # Convert to collaborative
+    story.story_type = 'collaborative'
+    story.save()
+
+    messages.success(request, f'"{story.title}" has been published to the community! Users can now submit and vote on prompts for future chapters.')
+    return redirect('stories:story_detail', slug=story.slug)
+
+
+@login_required
 def credits_dashboard(request):
     """Credits dashboard showing balance and transaction history"""
     from users.models import CreditPackage
