@@ -379,3 +379,42 @@ class Feedback(models.Model):
     def __str__(self):
         username = self.user.username if self.user else self.email or 'Anonymous'
         return f"{self.get_type_display()} - {self.subject} ({username})"
+
+
+class SiteSettings(models.Model):
+    """Global site settings - singleton model"""
+
+    beta_mode_enabled = models.BooleanField(
+        default=False,
+        help_text="Enable beta testing mode (unlimited credits for all users)"
+    )
+    beta_message = models.CharField(
+        max_length=500,
+        default="We're in Beta! Generate unlimited chapters for free during this testing period.",
+        help_text="Message shown to users during beta"
+    )
+
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Site Settings'
+        verbose_name_plural = 'Site Settings'
+
+    def save(self, *args, **kwargs):
+        # Ensure only one instance exists
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        # Prevent deletion
+        pass
+
+    @classmethod
+    def get_settings(cls):
+        """Get or create the singleton settings instance"""
+        settings, created = cls.objects.get_or_create(pk=1)
+        return settings
+
+    def __str__(self):
+        return "Site Settings"

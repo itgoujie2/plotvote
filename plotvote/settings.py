@@ -85,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'users.context_processors.daily_login_check',
+                'stories.context_processors.beta_mode',
             ],
         },
     },

@@ -39,7 +39,10 @@
                             </a>
                             {% if user.is_staff %}
                                 <a href="{% url 'stories:feedback_admin' %}" class="text-orange-600 hover:text-orange-700 font-medium">
-                                    Admin
+                                    Feedback Admin
+                                </a>
+                                <a href="{% url 'stories:toggle_beta_mode' %}" class="text-purple-600 hover:text-purple-700 font-medium">
+                                    Beta Settings
                                 </a>
                             {% endif %}
                         </div>
@@ -76,6 +79,21 @@
             </div>
         </div>
     </nav>
+
+    <!-- Beta Mode Banner -->
+    {% if is_beta_mode %}
+        <div class="bg-gradient-to-r from-green-500 to-emerald-600 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">🚀</span>
+                    <div class="flex-1">
+                        <p class="font-semibold">{{ beta_message }}</p>
+                    </div>
+                    <span class="text-xs font-bold bg-white/20 px-3 py-1 rounded-full">BETA</span>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <!-- Messages -->
     {% if messages %}

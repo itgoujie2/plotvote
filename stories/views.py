@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.db.models import Count, Q
-from .models import Story, Chapter, Prompt, Vote, Comment, Feedback
+from .models import Story, Chapter, Prompt, Vote, Comment, Feedback, SiteSettings
 from .ai_generator import generate_chapter
 from users.models import CreditTransaction
 
@@ -424,32 +424,38 @@ def continue_personal_story(request, slug):
         elif len(prompt_text) > 3000:
             messages.error(request, 'Prompt must be 3000 characters or less.')
         else:
-            # Check if user has enough credits
-            profile = request.user.profile
-            if not profile.has_credits(1):
-                messages.error(request, 'Not enough credits! You need 1 credit to generate a chapter.')
-                return redirect('stories:credits_dashboard')
+            # Check beta mode
+            settings = SiteSettings.get_settings()
+            beta_mode = settings.beta_mode_enabled
 
-            # Deduct credit before generation
-            if not profile.deduct_credits(1):
-                messages.error(request, 'Failed to deduct credits. Please try again.')
-                return redirect('stories:continue_personal_story', slug=story.slug)
+            # Check if user has enough credits (skip during beta)
+            profile = request.user.profile
+            if not beta_mode:
+                if not profile.has_credits(1):
+                    messages.error(request, 'Not enough credits! You need 1 credit to generate a chapter.')
+                    return redirect('stories:credits_dashboard')
+
+                # Deduct credit before generation
+                if not profile.deduct_credits(1):
+                    messages.error(request, 'Failed to deduct credits. Please try again.')
+                    return redirect('stories:continue_personal_story', slug=story.slug)
 
             # Generate chapter using AI
             previous_chapters = story.chapters.filter(status='published').order_by('-chapter_number')
             result = generate_chapter(story, prompt_text, previous_chapters)
 
             if 'error' in result:
-                # Refund credit on error
-                profile.add_credits(1, source='earned')
-                CreditTransaction.objects.create(
-                    user=request.user,
-                    amount=1,
-                    transaction_type='refund',
-                    description=f'Refund for failed chapter generation: {result["error"][:100]}',
-                    story=story,
-                    balance_after=profile.credits
-                )
+                # Refund credit on error (only if not in beta mode)
+                if not beta_mode:
+                    profile.add_credits(1, source='earned')
+                    CreditTransaction.objects.create(
+                        user=request.user,
+                        amount=1,
+                        transaction_type='refund',
+                        description=f'Refund for failed chapter generation: {result["error"][:100]}',
+                        story=story,
+                        balance_after=profile.credits
+                    )
                 messages.error(request, result['error'])
             else:
                 # Create and publish the chapter
@@ -672,3 +678,39 @@ def feedback_admin(request):
         'type_choices': Feedback.TYPE_CHOICES,
     }
     return render(request, 'stories/feedback_admin.html', context)
+
+
+@login_required
+def toggle_beta_mode(request):
+    """Toggle beta testing mode (staff only)"""
+    if not request.user.is_staff:
+        messages.error(request, 'You do not have permission to access this page.')
+        return redirect('stories:homepage')
+
+    settings = SiteSettings.get_settings()
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'enable':
+            settings.beta_mode_enabled = True
+            settings.updated_by = request.user
+            settings.save()
+            messages.success(request, 'Beta mode ENABLED! All users now have unlimited credits.')
+        elif action == 'disable':
+            settings.beta_mode_enabled = False
+            settings.updated_by = request.user
+            settings.save()
+            messages.success(request, 'Beta mode DISABLED. Credit system is now active.')
+        elif action == 'update_message':
+            beta_message = request.POST.get('beta_message', '')
+            if beta_message:
+                settings.beta_message = beta_message
+                settings.updated_by = request.user
+                settings.save()
+                messages.success(request, 'Beta message updated successfully.')
+
+    context = {
+        'settings': settings,
+    }
+    return render(request, 'stories/beta_admin.html', context)

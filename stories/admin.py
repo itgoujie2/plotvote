@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Story, Chapter, Prompt, Vote, Comment, Feedback
+from .models import Story, Chapter, Prompt, Vote, Comment, Feedback, SiteSettings
 
 
 @admin.register(Story)
@@ -77,3 +77,17 @@ class FeedbackAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    list_display = ['beta_mode_enabled', 'updated_by', 'updated_at']
+    readonly_fields = ['updated_at']
+
+    def has_add_permission(self, request):
+        # Only allow one instance
+        return not SiteSettings.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        # Prevent deletion
+        return False
