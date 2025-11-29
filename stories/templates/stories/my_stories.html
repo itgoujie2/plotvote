@@ -56,6 +56,13 @@
                                         </button>
                                     </form>
                                 {% endif %}
+
+                                <form action="{% url 'stories:delete_story' story.slug %}" method="post" onsubmit="return confirm('Are you sure you want to delete &quot;{{ story.title }}&quot;? This action cannot be undone and will delete all chapters.');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="w-full text-center bg-red-100 hover:bg-red-200 text-red-700 font-semibold px-4 py-2 rounded-lg transition text-sm">
+                                        Delete Story
+                                    </button>
+                                </form>
                             {% else %}
                                 <!-- Published story - view only -->
                                 <a href="{% url 'stories:story_detail' story.slug %}" class="block w-full text-center bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-lg transition">

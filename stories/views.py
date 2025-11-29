@@ -714,3 +714,21 @@ def toggle_beta_mode(request):
         'settings': settings,
     }
     return render(request, 'stories/beta_admin.html', context)
+
+
+@login_required
+def delete_story(request, slug):
+    """Delete a story (only creator can delete)"""
+    story = get_object_or_404(Story, slug=slug, created_by=request.user)
+
+    if request.method != 'POST':
+        return redirect('stories:my_stories')
+
+    # Store title for success message
+    story_title = story.title
+
+    # Delete the story (cascade will delete chapters, prompts, etc.)
+    story.delete()
+
+    messages.success(request, f'Story "{story_title}" has been deleted.')
+    return redirect('stories:my_stories')
