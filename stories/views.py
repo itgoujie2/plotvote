@@ -732,3 +732,32 @@ def delete_story(request, slug):
 
     messages.success(request, f'Story "{story_title}" has been deleted.')
     return redirect('stories:my_stories')
+
+
+@login_required
+def edit_chapter(request, slug, chapter_number):
+    """Edit a chapter (only story creator can edit)"""
+    story = get_object_or_404(Story, slug=slug, created_by=request.user)
+    chapter = get_object_or_404(Chapter, story=story, chapter_number=chapter_number)
+
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        content = request.POST.get('content', '').strip()
+
+        if not title:
+            messages.error(request, 'Chapter title cannot be empty.')
+        elif not content:
+            messages.error(request, 'Chapter content cannot be empty.')
+        else:
+            chapter.title = title
+            chapter.content = content
+            chapter.save()  # This will recalculate word count and read time
+
+            messages.success(request, f'Chapter {chapter_number} has been updated!')
+            return redirect('stories:chapter_detail', slug=story.slug, chapter_number=chapter_number)
+
+    context = {
+        'story': story,
+        'chapter': chapter,
+    }
+    return render(request, 'stories/edit_chapter.html', context)

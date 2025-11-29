@@ -12,6 +12,7 @@ urlpatterns = [
     path('create-story/', views.create_story_pitch, name='create_story_pitch'),
     path('story/<slug:slug>/', views.story_detail, name='story_detail'),
     path('story/<slug:slug>/chapter/<int:chapter_number>/', views.chapter_detail, name='chapter_detail'),
+    path('story/<slug:slug>/chapter/<int:chapter_number>/edit/', views.edit_chapter, name='edit_chapter'),
     path('story/<slug:slug>/chapter/<int:chapter_number>/comment/', views.add_comment, name='add_comment'),
     path('story/<slug:slug>/submit-prompt/', views.submit_prompt, name='submit_prompt'),
     path('story/<slug:slug>/subscribe/', views.subscribe_story, name='subscribe_story'),
