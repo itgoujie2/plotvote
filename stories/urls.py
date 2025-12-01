@@ -28,6 +28,9 @@ urlpatterns = [
     path('story/<slug:slug>/publish-to-community/', views.publish_to_community, name='publish_to_community'),
     path('story/<slug:slug>/delete/', views.delete_story, name='delete_story'),
 
+    # Cover image generation
+    path('generate-cover/', views.generate_cover_image, name='generate_cover_image'),
+
     # Credits
     path('credits/', views.credits_dashboard, name='credits_dashboard'),
 

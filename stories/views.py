@@ -248,6 +248,7 @@ def create_story_pitch(request):
         description = request.POST.get('description', '').strip()
         genre = request.POST.get('genre', 'fantasy')
         language = request.POST.get('language', 'en')
+        cover_image_url = request.POST.get('cover_image_url', '').strip()
 
         # Story Framework fields (optional)
         characters = request.POST.get('characters', '').strip()
@@ -277,6 +278,16 @@ def create_story_pitch(request):
                 planned_chapters=int(planned_chapters) if planned_chapters else None,
                 writing_style_notes=writing_style_notes,
             )
+
+            # Download and save cover image if generated
+            if cover_image_url:
+                from .cover_generator import download_and_save_cover
+                success, message = download_and_save_cover(story, cover_image_url)
+                if not success:
+                    # Log the error but don't fail story creation
+                    logger = __import__('logging').getLogger(__name__)
+                    logger.warning(f"Failed to save cover image for story {story.id}: {message}")
+
             # Auto-upvote your own pitch
             story.upvoters.add(request.user)
             messages.success(request, f'Story pitch "{title}" created! Get 10 votes to activate it.')
@@ -366,6 +377,7 @@ def create_personal_story(request):
         description = request.POST.get('description', '').strip()
         genre = request.POST.get('genre', 'fantasy')
         language = request.POST.get('language', 'en')
+        cover_image_url = request.POST.get('cover_image_url', '').strip()
 
         # Story Framework fields (optional)
         characters = request.POST.get('characters', '').strip()
@@ -396,6 +408,16 @@ def create_personal_story(request):
                 planned_chapters=int(planned_chapters) if planned_chapters else None,
                 writing_style_notes=writing_style_notes,
             )
+
+            # Download and save cover image if generated
+            if cover_image_url:
+                from .cover_generator import download_and_save_cover
+                success, message = download_and_save_cover(story, cover_image_url)
+                if not success:
+                    # Log the error but don't fail story creation
+                    logger = __import__('logging').getLogger(__name__)
+                    logger.warning(f"Failed to save cover image for story {story.id}: {message}")
+
             messages.success(request, f'Personal story "{title}" created! Start writing your first chapter.')
             return redirect('stories:continue_personal_story', slug=story.slug)
 
@@ -761,3 +783,102 @@ def edit_chapter(request, slug, chapter_number):
         'chapter': chapter,
     }
     return render(request, 'stories/edit_chapter.html', context)
+
+
+@login_required
+def generate_cover_image(request):
+    """Generate a cover image using DALL-E 3 (AJAX endpoint)"""
+    from django.http import JsonResponse
+    from django.core.cache import cache
+    from .cover_generator import generate_story_cover
+    import hashlib
+
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Method not allowed'}, status=405)
+
+    try:
+        # Get basic story details from request
+        title = request.POST.get('title', '').strip()
+        genre = request.POST.get('genre', 'fantasy')
+
+        # Check if using custom description or full story details
+        custom_description = request.POST.get('custom_description', '').strip()
+
+        # Validate inputs
+        if not title:
+            return JsonResponse({'success': False, 'error': 'Title is required'})
+
+        # Rate limiting: 3 generations per story (based on title hash)
+        # This prevents users from regenerating the same story cover endlessly
+        title_hash = hashlib.md5(title.lower().encode()).hexdigest()[:8]
+        cache_key = f'cover_gen_{request.user.id}_{title_hash}'
+
+        # Get current attempt count
+        attempt_count = cache.get(cache_key, 0)
+
+        # Check if limit exceeded
+        MAX_ATTEMPTS = 3
+        if attempt_count >= MAX_ATTEMPTS:
+            return JsonResponse({
+                'success': False,
+                'error': f'Generation limit reached. You can generate up to {MAX_ATTEMPTS} covers per story.',
+                'attempts_remaining': 0
+            })
+
+        # Increment attempt count (expires in 24 hours)
+        cache.set(cache_key, attempt_count + 1, 86400)  # 24 hours
+
+        # Generate the cover image
+        if custom_description:
+            # Use custom description mode
+            success, result = generate_story_cover(
+                title=title,
+                description=custom_description,
+                genre=genre,
+                characters='',
+                world_building='',
+                themes=''
+            )
+        else:
+            # Use full story details mode
+            description = request.POST.get('description', '').strip()
+            characters = request.POST.get('characters', '').strip()
+            world_building = request.POST.get('world_building', '').strip()
+            themes = request.POST.get('themes', '').strip()
+
+            if not description:
+                return JsonResponse({'success': False, 'error': 'Description is required'})
+
+            success, result = generate_story_cover(
+                title=title,
+                description=description,
+                genre=genre,
+                characters=characters,
+                world_building=world_building,
+                themes=themes
+            )
+
+        # Calculate remaining attempts
+        attempts_remaining = MAX_ATTEMPTS - (attempt_count + 1)
+
+        if success:
+            image_url = result
+            return JsonResponse({
+                'success': True,
+                'image_url': image_url,
+                'message': 'Cover image generated successfully!',
+                'attempts_remaining': attempts_remaining
+            })
+        else:
+            error_message = result
+            return JsonResponse({
+                'success': False,
+                'error': error_message,
+                'attempts_remaining': attempts_remaining
+            })
+
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': f'An error occurred: {str(e)}'
+        })
