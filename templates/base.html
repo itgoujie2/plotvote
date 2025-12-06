@@ -3,12 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PlotVote - Community-Driven AI Stories{% endblock %}</title>
+
+    <!-- Primary Meta Tags -->
+    <title>{% block title %}PlotVote - Collaborative AI Storytelling Platform{% endblock %}</title>
+    <meta name="title" content="{% block meta_title %}PlotVote - Collaborative AI Storytelling Platform{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Create and vote on AI-generated stories. Join a community of writers and readers shaping interactive fiction together with collaborative storytelling.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}collaborative storytelling, AI story generation, interactive fiction, community writing, creative writing, story voting{% endblock %}">
+    <meta name="author" content="PlotVote">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{{ request.path }}{% endblock %}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta property="og:title" content="{% block og_title %}PlotVote - Collaborative AI Storytelling{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Create and vote on AI-generated stories. Join a community of writers and readers shaping interactive fiction together.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}/static/images/plotvote-og-image.png{% endblock %}">
+    <meta property="og:site_name" content="PlotVote">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+    <meta name="twitter:title" content="{% block twitter_title %}PlotVote - Collaborative AI Storytelling{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Create and vote on AI-generated stories. Join a community of writers and readers.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}/static/images/plotvote-twitter-card.png{% endblock %}">
+    <meta name="twitter:site" content="@PlotVoteApp">
+
+    <!-- Favicon (placeholder - create actual favicons later) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+
+    <!-- Additional SEO -->
+    <meta name="theme-color" content="#6366f1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6109615784811631"
          crossorigin="anonymous"></script>
 
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .prose {
@@ -16,6 +54,8 @@
             line-height: 1.75;
         }
     </style>
+
+    {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-gray-50">
     <!-- Navigation -->

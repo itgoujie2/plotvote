@@ -54,6 +54,9 @@ def homepage(request):
 
 def story_detail(request, slug):
     """Story detail page showing all chapters and current voting"""
+    from .seo_utils import get_story_meta, get_structured_data_story
+    import json
+
     story = get_object_or_404(Story, slug=slug)
     chapters = story.chapters.filter(status='published').order_by('chapter_number')
 
@@ -73,18 +76,28 @@ def story_detail(request, slug):
         if user_vote:
             user_voted_prompt = user_vote.prompt
 
+    # SEO metadata
+    seo_meta = get_story_meta(story)
+    structured_data = get_structured_data_story(story)
+
     context = {
         'story': story,
         'chapters': chapters,
         'current_prompts': current_prompts,
         'user_voted_prompt': user_voted_prompt,
         'is_subscribed': request.user.is_authenticated and story.subscribers.filter(id=request.user.id).exists(),
+        # SEO data
+        'seo_meta': seo_meta,
+        'structured_data_json': json.dumps(structured_data),
     }
     return render(request, 'stories/story_detail.html', context)
 
 
 def chapter_detail(request, slug, chapter_number):
     """Individual chapter reading view"""
+    from .seo_utils import get_chapter_meta, get_structured_data_chapter
+    import json
+
     story = get_object_or_404(Story, slug=slug)
     chapter = get_object_or_404(Chapter, story=story, chapter_number=chapter_number, status='published')
 
@@ -129,12 +142,19 @@ def chapter_detail(request, slug, chapter_number):
 
     comments = chapter.comments.select_related('user').order_by('created_at')
 
+    # SEO metadata
+    seo_meta = get_chapter_meta(chapter)
+    structured_data = get_structured_data_chapter(chapter)
+
     context = {
         'story': story,
         'chapter': chapter,
         'prev_chapter': prev_chapter,
         'next_chapter': next_chapter,
         'comments': comments,
+        # SEO data
+        'seo_meta': seo_meta,
+        'structured_data_json': json.dumps(structured_data),
     }
     return render(request, 'stories/chapter_detail.html', context)
 

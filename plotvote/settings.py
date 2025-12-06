@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',  # For SEO sitemap generation
 
     # Local apps
     'stories',
@@ -157,6 +158,45 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================================================================
+# SEO CONFIGURATION
+# ============================================================================
+
+# Site information
+SITE_NAME = 'PlotVote'
+SITE_PROTOCOL = 'https' if not DEBUG else 'http'
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'localhost:8000' if DEBUG else 'plotvote.com')
+
+# SEO Meta defaults
+META_SITE_PROTOCOL = SITE_PROTOCOL
+META_SITE_DOMAIN = SITE_DOMAIN
+META_SITE_NAME = SITE_NAME
+META_USE_OG_PROPERTIES = True
+META_USE_TWITTER_PROPERTIES = True
+META_USE_SCHEMA_ORG_PROPERTIES = True
+
+# Default meta tags
+META_DEFAULT_KEYWORDS = [
+    'collaborative storytelling',
+    'AI story generation',
+    'interactive fiction',
+    'community writing',
+    'creative writing',
+    'story voting',
+    'AI writing assistant',
+    'collaborative fiction',
+]
+
+# Social media
+TWITTER_HANDLE = os.getenv('TWITTER_HANDLE', 'PlotVoteApp')  # Update when you create Twitter account
+
+# Default Open Graph image (create this later)
+META_IMAGE_URL = f"{SITE_PROTOCOL}://{SITE_DOMAIN}/static/images/plotvote-og-image.png"
+
+# ============================================================================
+# END SEO CONFIGURATION
+# ============================================================================
 
 # Celery Configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
