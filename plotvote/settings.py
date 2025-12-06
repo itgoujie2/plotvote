@@ -98,19 +98,32 @@ WSGI_APPLICATION = 'plotvote.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'plotvote',
-        'USER': 'plotvote',  # Replace with your MySQL username
-        'PASSWORD': 'Aa20130715',  # Replace with your MySQL password
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
+# Use MySQL in production (EC2), SQLite locally
+USE_MYSQL = os.getenv('USE_MYSQL', 'False') == 'True'
+
+if USE_MYSQL:
+    # Production MySQL configuration
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'plotvote'),
+            'USER': os.getenv('DB_USER', 'plotvote'),
+            'PASSWORD': os.getenv('DB_PASSWORD', 'Aa20130715'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            },
+        }
     }
-}
+else:
+    # Local SQLite configuration
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation

@@ -1,0 +1,31 @@
+# PlotVote Robots.txt
+# Tells search engines which pages to crawl
+
+User-agent: *
+Allow: /
+Allow: /story/
+Allow: /pitch/
+
+# Disallow private/admin areas
+Disallow: /admin/
+Disallow: /my-stories/
+Disallow: /story/*/delete/
+Disallow: /story/*/edit/
+Disallow: /accounts/
+Disallow: /users/profile/
+Disallow: /webhooks/
+
+# Disallow parameters that create duplicate content
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /*?page=
+
+# Sitemaps
+Sitemap: {{ request.scheme }}://{{ request.get_host }}/sitemap.xml
+
+# Crawl-delay for specific bots (optional, helps manage server load)
+User-agent: Googlebot
+Crawl-delay: 1
+
+User-agent: Bingbot
+Crawl-delay: 1
