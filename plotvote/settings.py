@@ -100,8 +100,15 @@ WSGI_APPLICATION = 'plotvote.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'plotvote',
+        'USER': 'plotvote',  # Replace with your MySQL username
+        'PASSWORD': 'Aa20130715',  # Replace with your MySQL password
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        },
     }
 }
 
