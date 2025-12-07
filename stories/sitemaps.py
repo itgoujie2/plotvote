@@ -17,7 +17,7 @@ class StaticViewSitemap(Sitemap):
         return [
             'stories:homepage',
             'stories:create_personal_story',
-            'stories:create_pitch',
+            'stories:create_story_pitch',
         ]
 
     def location(self, item):
