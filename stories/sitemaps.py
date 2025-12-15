@@ -16,6 +16,10 @@ class StaticViewSitemap(Sitemap):
         """Return list of static URL names"""
         return [
             'stories:homepage',
+            'stories:ai_storytelling',
+            'stories:crowdsourced_storytelling',
+            'stories:interactive_fiction',
+            'stories:how_it_works',
             'stories:create_personal_story',
             'stories:create_story_pitch',
         ]

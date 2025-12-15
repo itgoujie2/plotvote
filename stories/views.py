@@ -48,8 +48,32 @@ def homepage(request):
         'pitched_stories': pitched_stories,
         'language_choices': Story.LANGUAGE_CHOICES,
         'selected_language': language_filter,
+        # SEO meta tags
+        'page_title': 'PlotVote - AI Storytelling & Crowdsourced Fiction Platform',
+        'meta_description': 'Create collaborative stories with AI. Join our crowdsourced storytelling platform where communities write interactive fiction together. Vote on plot twists and shape AI-generated narratives.',
+        'meta_keywords': 'ai storytelling, crowdsourced storytelling, collaborative writing, interactive fiction, community stories, AI-generated fiction, collaborative fiction, story voting platform',
     }
     return render(request, 'stories/homepage.html', context)
+
+
+def ai_storytelling(request):
+    """AI Storytelling landing page"""
+    return render(request, 'stories/ai_storytelling.html')
+
+
+def crowdsourced_storytelling(request):
+    """Crowdsourced Storytelling landing page"""
+    return render(request, 'stories/crowdsourced_storytelling.html')
+
+
+def interactive_fiction(request):
+    """Interactive Fiction landing page"""
+    return render(request, 'stories/interactive_fiction.html')
+
+
+def how_it_works(request):
+    """How It Works page"""
+    return render(request, 'stories/how_it_works.html')
 
 
 def story_detail(request, slug):

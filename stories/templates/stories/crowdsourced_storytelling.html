@@ -1,0 +1,486 @@
+{% extends 'base.html' %}
+
+{% block title %}Crowdsourced Storytelling Platform - Collaborative Fiction Writing | PlotVote{% endblock %}
+{% block meta_title %}Crowdsourced Storytelling Platform - Collaborative Fiction Writing | PlotVote{% endblock %}
+{% block meta_description %}Join the crowdsourced storytelling revolution. PlotVote enables communities to collaboratively write fiction through voting and AI generation. Create community-driven narratives, vote on plot twists, and experience the power of collective creativity.{% endblock %}
+{% block meta_keywords %}crowdsourced storytelling, collaborative writing, community fiction, collaborative storytelling, crowdsourcing stories, collective writing, community-driven narratives, group storytelling, collaborative narrative, voting stories{% endblock %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}/crowdsourced-storytelling/{% endblock %}
+
+{% block og_title %}Crowdsourced Storytelling Platform - Write Fiction Together{% endblock %}
+{% block og_description %}Experience crowdsourced storytelling where communities vote on plot directions and collectively create engaging fiction. Join PlotVote's collaborative writing platform today.{% endblock %}
+
+{% block twitter_title %}Crowdsourced Storytelling Platform - Write Fiction Together{% endblock %}
+{% block twitter_description %}Experience crowdsourced storytelling where communities vote on plot directions and collectively create engaging fiction.{% endblock %}
+
+{% block extra_head %}
+<!-- Structured Data for Crowdsourced Storytelling Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Crowdsourced Storytelling Platform",
+  "description": "Community-driven collaborative fiction writing platform where members vote on story directions and create narratives together",
+  "url": "{{ request.scheme }}://{{ request.get_host }}/crowdsourced-storytelling/",
+  "mainEntity": {
+    "@type": "SoftwareApplication",
+    "name": "PlotVote Crowdsourced Storytelling",
+    "applicationCategory": "EntertainmentApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Community Voting on Plot Directions",
+      "Collaborative Story Development",
+      "AI-Assisted Chapter Generation",
+      "Democratic Creative Process",
+      "Multi-User Fiction Projects"
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ request.scheme }}://{{ request.get_host }}/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Crowdsourced Storytelling",
+        "item": "{{ request.scheme }}://{{ request.get_host }}/crowdsourced-storytelling/"
+      }
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Crowdsourced Storytelling: Write Fiction Together
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-8">
+            Welcome to the future of <strong>collaborative writing</strong>. PlotVote brings communities together
+            to create <strong>crowdsourced storytelling</strong> experiences where every member shapes the narrative
+            through democratic voting and collective creativity.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'stories:homepage' %}" class="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition">
+                Join a Story Community
+            </a>
+            <a href="/how-it-works/" class="inline-block bg-white text-indigo-600 border-2 border-indigo-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-50 transition">
+                How It Works
+            </a>
+        </div>
+    </div>
+
+    <!-- What is Crowdsourced Storytelling Section -->
+    <section class="mb-16 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 md:p-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-6">What is Crowdsourced Storytelling?</h2>
+        <div class="prose prose-lg max-w-none text-gray-700">
+            <p class="text-xl leading-relaxed mb-4">
+                <strong>Crowdsourced storytelling</strong> is a revolutionary approach to fiction creation where
+                communities collaboratively develop narratives through democratic participation. Unlike traditional
+                solo authorship, <strong>collaborative writing</strong> on PlotVote distributes creative power among
+                all community members, allowing diverse perspectives to shape plot development, character arcs, and
+                thematic elements.
+            </p>
+            <p class="text-lg leading-relaxed mb-4">
+                In our <strong>community fiction</strong> platform, each member can propose plot directions, vote on
+                story developments, and influence narrative outcomes. This <strong>collaborative storytelling</strong>
+                model creates richer, more unpredictable narratives than any single author could produce alone. The
+                wisdom of the crowd generates plot twists, character decisions, and story arcs that reflect collective
+                imagination and diverse creative input.
+            </p>
+            <p class="text-lg leading-relaxed">
+                <strong>Crowdsourcing stories</strong> democratizes creative fiction, making storytelling accessible
+                to everyone regardless of writing experience. Whether you're a seasoned author or someone who simply
+                loves stories, <strong>collaborative narrative</strong> creation on PlotVote gives you a meaningful
+                voice in shaping engaging fiction.
+            </p>
+        </div>
+    </section>
+
+    <!-- How Crowdsourced Storytelling Works -->
+    <section class="mb-16">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">The Collaborative Writing Process</h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Step 1 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-purple-600">
+                <div class="text-4xl font-bold text-purple-600 mb-4">01</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Pitch Your Story Idea</h3>
+                <p class="text-gray-600">
+                    Any community member can propose a story premise. Describe the genre, setting, characters, and
+                    initial setup for <strong>collaborative fiction</strong> creation.
+                </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-pink-600">
+                <div class="text-4xl font-bold text-pink-600 mb-4">02</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Community Approves Stories</h3>
+                <p class="text-gray-600">
+                    Members vote on pitched ideas. Stories with community support move forward in our
+                    <strong>crowdsourced storytelling</strong> process, ensuring collective buy-in from the start.
+                </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-indigo-600">
+                <div class="text-4xl font-bold text-indigo-600 mb-4">03</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Vote on Plot Directions</h3>
+                <p class="text-gray-600">
+                    For each chapter, members submit and vote on plot options. The winning direction guides the
+                    story's development in this democratic <strong>collaborative writing</strong> system.
+                </p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-600">
+                <div class="text-4xl font-bold text-blue-600 mb-4">04</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">AI Generates the Chapter</h3>
+                <p class="text-gray-600">
+                    Our AI transforms the community's chosen direction into a complete chapter, maintaining narrative
+                    quality while executing the <strong>community-driven narrative</strong> vision.
+                </p>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-indigo-50 rounded-xl p-8 border-l-4 border-indigo-600">
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Why This Model Works</h3>
+            <p class="text-lg text-gray-700 mb-4">
+                <strong>Crowdsourced storytelling</strong> harnesses collective intelligence. Research shows that
+                diverse groups make better creative decisions than individuals, producing more innovative plot
+                developments and unexpected narrative turns.
+            </p>
+            <p class="text-lg text-gray-700">
+                By combining democratic voting with AI generation, PlotVote delivers the creative benefits of
+                <strong>collaborative writing</strong> without the coordination challenges of traditional group
+                authorship. Communities guide the narrative while technology handles execution.
+            </p>
+        </div>
+    </section>
+
+    <!-- Benefits of Crowdsourced Storytelling -->
+    <section class="mb-16 bg-gray-50 rounded-2xl p-8 md:p-12">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Benefits of Collaborative Fiction</h2>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Diverse Perspectives</h3>
+                    <p class="text-gray-600">
+                        <strong>Crowdsourced storytelling</strong> incorporates ideas from varied backgrounds, ages,
+                        and cultures, creating richer narratives than single-author works.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Democratic Creative Process</h3>
+                    <p class="text-gray-600">
+                        Every community member has equal voice in <strong>collaborative writing</strong>. Plot
+                        decisions emerge from genuine consensus, not editorial hierarchy.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Unpredictable Plot Development</h3>
+                    <p class="text-gray-600">
+                        <strong>Community fiction</strong> produces surprising plot twists and unconventional story
+                        arcs that surprise even the most creative individual authors.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Built-in Audience Engagement</h3>
+                    <p class="text-gray-600">
+                        Contributors become invested readers. <strong>Crowdsourcing stories</strong> creates
+                        passionate communities who promote and discuss the narratives they help create.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Creative Learning Environment</h3>
+                    <p class="text-gray-600">
+                        <strong>Collaborative storytelling</strong> teaches narrative structure, plot development,
+                        and character arcs through participation and observation.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Accessible to All Skill Levels</h3>
+                    <p class="text-gray-600">
+                        No writing expertise required for <strong>collaborative writing</strong>. Vote on options,
+                        propose ideas, and contribute meaningfully regardless of experience.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison: Traditional vs Crowdsourced -->
+    <section class="mb-16">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">
+            Traditional Writing vs. Crowdsourced Storytelling
+        </h2>
+
+        <div class="overflow-x-auto">
+            <table class="w-full bg-white rounded-xl shadow-lg overflow-hidden">
+                <thead class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+                    <tr>
+                        <th class="px-6 py-4 text-left">Aspect</th>
+                        <th class="px-6 py-4 text-left">Traditional Writing</th>
+                        <th class="px-6 py-4 text-left">Crowdsourced Storytelling</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    <tr>
+                        <td class="px-6 py-4 font-semibold">Creative Control</td>
+                        <td class="px-6 py-4">Single author decides everything</td>
+                        <td class="px-6 py-4 text-green-700 font-semibold">Community votes democratically</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 font-semibold">Development Speed</td>
+                        <td class="px-6 py-4">Months or years per project</td>
+                        <td class="px-6 py-4 text-green-700 font-semibold">Chapters released regularly</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-semibold">Perspective Diversity</td>
+                        <td class="px-6 py-4">Limited to author's viewpoint</td>
+                        <td class="px-6 py-4 text-green-700 font-semibold">Multiple voices and backgrounds</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 font-semibold">Audience Engagement</td>
+                        <td class="px-6 py-4">Readers consume passively</td>
+                        <td class="px-6 py-4 text-green-700 font-semibold">Active participation and ownership</td>
+                    </tr>
+                    <tr>
+                        <td class="px-6 py-4 font-semibold">Entry Barrier</td>
+                        <td class="px-6 py-4">Requires writing expertise</td>
+                        <td class="px-6 py-4 text-green-700 font-semibold">Anyone can contribute ideas</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <td class="px-6 py-4 font-semibold">Plot Predictability</td>
+                        <td class="px-6 py-4">Often follows genre formulas</td>
+                        <td class="px-6 py-4 text-green-700 font-semibold">Unexpected twists and turns</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-16 bg-white rounded-2xl p-8 md:p-12 shadow-lg">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">
+            Crowdsourced Storytelling FAQ
+        </h2>
+
+        <div class="max-w-4xl mx-auto space-y-6" itemscope itemtype="https://schema.org/FAQPage">
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    What makes crowdsourced storytelling different from traditional collaborative writing?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            <strong>Crowdsourced storytelling</strong> uses democratic voting to make creative decisions,
+                            whereas traditional <strong>collaborative writing</strong> often involves small groups negotiating
+                            or a lead author making final calls. On PlotVote, every community member has equal voting power,
+                            and AI handles the actual prose composition based on winning plot directions. This eliminates the
+                            coordination challenges and creative conflicts common in traditional group writing projects.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    How do you prevent crowdsourced stories from becoming chaotic or inconsistent?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            Our <strong>collaborative fiction</strong> platform uses AI to maintain narrative consistency.
+                            While the community democratically chooses plot directions through voting, our AI analyzes all
+                            previous chapters to ensure character continuity, plot coherence, and tonal consistency. The system
+                            flags plot options that would create major continuity issues, helping the community make informed
+                            decisions. This combination of human creativity and AI quality control ensures
+                            <strong>community-driven narratives</strong> remain coherent and satisfying.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    Can I start my own crowdsourced story project?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            Absolutely! Any registered user can pitch a <strong>collaborative writing</strong> project on
+                            PlotVote. Simply provide a story premise, genre, initial setup, and framework. The community votes
+                            on pitched ideas, and approved stories move into active development. You'll guide the initial setup
+                            but relinquish creative control to community voting once the story launches—that's the essence of
+                            true <strong>crowdsourced storytelling</strong>. You can also create private personal stories where
+                            you maintain full control if you prefer to experiment before launching a community project.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    How many people typically participate in crowdsourced fiction projects?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            <strong>Community fiction</strong> projects on PlotVote typically attract 10-100+ active participants,
+                            depending on genre popularity and story quality. Some popular <strong>collaborative storytelling</strong>
+                            projects have hundreds of community members voting on plot directions. The beauty of our platform
+                            is that stories work equally well with small intimate communities or large diverse groups. More
+                            participants generally produce more creative plot options to vote on, but even modest communities
+                            create excellent <strong>crowdsourced stories</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    What happens if I disagree with the community's plot decisions?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            <strong>Crowdsourced storytelling</strong> embraces democratic outcomes, which means not every vote
+                            goes your way. Part of the excitement in <strong>collaborative writing</strong> is seeing stories
+                            evolve in unexpected directions. If you strongly disagree with community decisions in a particular
+                            story, you can: propose alternative plot options for future chapters, participate in different
+                            community projects that better align with your tastes, or create your own personal story where you
+                            maintain full creative control. The diversity of opinions is what makes <strong>community fiction</strong>
+                            more creative and unpredictable than solo authorship.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    Is crowdsourced storytelling suitable for all genres?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            <strong>Collaborative fiction</strong> works exceptionally well for most genres. Genre fiction like
+                            science fiction, fantasy, mystery, and thriller particularly thrive in <strong>crowdsourced storytelling</strong>
+                            environments because they have clear plot structures and engaging "what happens next" hooks that
+                            drive community participation. Romance, contemporary fiction, and even literary fiction also work
+                            well when communities share genre expectations. Very experimental or avant-garde fiction can be
+                            challenging for <strong>collaborative writing</strong> because community consensus tends toward
+                            accessible storytelling, but we've seen successful experimental projects with the right dedicated
+                            community.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-8 md:p-12 text-center text-white">
+        <h2 class="text-4xl font-bold mb-4">Join the Crowdsourced Storytelling Revolution</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+            Experience the power of <strong>collaborative writing</strong>. Create community-driven narratives,
+            vote on plot twists, and be part of something bigger than individual authorship.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'stories:create_story_pitch' %}" class="inline-block bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
+                Pitch a Collaborative Story
+            </a>
+            <a href="{% url 'stories:homepage' %}" class="inline-block bg-purple-700 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-800 transition border-2 border-white">
+                Explore Community Fiction
+            </a>
+        </div>
+    </section>
+
+    <!-- Internal Links Section -->
+    <section class="mt-16 pt-8 border-t border-gray-200">
+        <div class="grid md:grid-cols-3 gap-6 text-center">
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Technology</h3>
+                <a href="/ai-storytelling/" class="text-indigo-600 hover:text-indigo-800">
+                    AI Storytelling →
+                </a>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Story Formats</h3>
+                <a href="/interactive-fiction/" class="text-indigo-600 hover:text-indigo-800">
+                    Interactive Fiction →
+                </a>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Get Started</h3>
+                <a href="/how-it-works/" class="text-indigo-600 hover:text-indigo-800">
+                    How It Works →
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

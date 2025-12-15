@@ -1,0 +1,574 @@
+{% extends 'base.html' %}
+
+{% block title %}Interactive Fiction Platform - Community-Driven Interactive Stories | PlotVote{% endblock %}
+{% block meta_title %}Interactive Fiction Platform - Community-Driven Interactive Stories | PlotVote{% endblock %}
+{% block meta_description %}Discover interactive fiction reimagined. PlotVote combines community voting with AI storytelling to create dynamic, choice-driven narratives. Experience interactive stories that evolve based on collective decisions in this innovative platform.{% endblock %}
+{% block meta_keywords %}interactive fiction, interactive stories, choice-based fiction, choose your own adventure, branching narratives, interactive narrative, choice-driven stories, dynamic storytelling, participatory fiction, community-choice stories{% endblock %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}/interactive-fiction/{% endblock %}
+
+{% block og_title %}Interactive Fiction Platform - Community-Driven Stories{% endblock %}
+{% block og_description %}Experience interactive fiction where communities vote on story outcomes. Create choice-driven narratives powered by AI and collective creativity.{% endblock %}
+
+{% block twitter_title %}Interactive Fiction Platform - Community-Driven Stories{% endblock %}
+{% block twitter_description %}Experience interactive fiction where communities vote on story outcomes. Create choice-driven narratives powered by AI.{% endblock %}
+
+{% block extra_head %}
+<!-- Structured Data for Interactive Fiction Page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Interactive Fiction Platform",
+  "description": "Community-driven interactive fiction platform where readers vote on story directions and experience branching narratives",
+  "url": "{{ request.scheme }}://{{ request.get_host }}/interactive-fiction/",
+  "mainEntity": {
+    "@type": "SoftwareApplication",
+    "name": "PlotVote Interactive Fiction",
+    "applicationCategory": "EntertainmentApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Community-Driven Plot Choices",
+      "AI-Generated Branching Narratives",
+      "Democratic Story Voting",
+      "Multiple Genre Support",
+      "Dynamic Story Evolution"
+    ]
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "{{ request.scheme }}://{{ request.get_host }}/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Interactive Fiction",
+        "item": "{{ request.scheme }}://{{ request.get_host }}/interactive-fiction/"
+      }
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+        <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            Interactive Fiction Reimagined for Communities
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto mb-8">
+            Experience <strong>interactive fiction</strong> evolved beyond traditional "choose your own adventure" books.
+            PlotVote combines democratic voting with AI generation to create <strong>choice-driven narratives</strong>
+            where entire communities shape branching storylines together.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'stories:homepage' %}" class="inline-block bg-indigo-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-700 transition">
+                Experience Interactive Stories
+            </a>
+            <a href="/how-it-works/" class="inline-block bg-white text-indigo-600 border-2 border-indigo-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-50 transition">
+                How It Works
+            </a>
+        </div>
+    </div>
+
+    <!-- What is Interactive Fiction Section -->
+    <section class="mb-16 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl p-8 md:p-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-6">What is Interactive Fiction?</h2>
+        <div class="prose prose-lg max-w-none text-gray-700">
+            <p class="text-xl leading-relaxed mb-4">
+                <strong>Interactive fiction</strong> represents a narrative form where readers actively influence
+                story outcomes through choices and decisions. Unlike passive reading experiences, <strong>interactive
+                stories</strong> engage audiences as co-creators, allowing them to determine character actions, plot
+                directions, and narrative conclusions. This participatory approach transforms readers into active
+                participants who shape the stories they experience.
+            </p>
+            <p class="text-lg leading-relaxed mb-4">
+                Traditional <strong>choose your own adventure</strong> books pioneered this format in print, presenting
+                readers with periodic choice points that led to different page numbers and story branches. Modern
+                <strong>interactive fiction</strong> has evolved dramatically with digital platforms, enabling more
+                complex <strong>branching narratives</strong>, persistent character development, and sophisticated
+                storytelling techniques impossible in physical books.
+            </p>
+            <p class="text-lg leading-relaxed">
+                PlotVote revolutionizes <strong>interactive narrative</strong> by replacing individual choice-making
+                with democratic community voting. Instead of one reader deciding "turn to page 47," entire communities
+                collectively determine story directions through voting. AI then generates each chapter based on the
+                winning choice, creating unique <strong>choice-driven stories</strong> that reflect collective preferences
+                rather than individual decisions.
+            </p>
+        </div>
+    </section>
+
+    <!-- How PlotVote Interactive Fiction Works -->
+    <section class="mb-16">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Community-Driven Interactive Storytelling</h2>
+
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Traditional IF -->
+            <div class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-200">
+                <h3 class="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                    <svg class="w-8 h-8 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                    Traditional Interactive Fiction
+                </h3>
+                <ul class="space-y-3 text-gray-600">
+                    <li class="flex items-start">
+                        <span class="text-gray-400 mr-2">•</span>
+                        Individual reader makes all choices
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-gray-400 mr-2">•</span>
+                        Pre-written branching paths by single author
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-gray-400 mr-2">•</span>
+                        Limited branches due to writing complexity
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-gray-400 mr-2">•</span>
+                        Fixed narrative possibilities
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-gray-400 mr-2">•</span>
+                        Solitary reading experience
+                    </li>
+                </ul>
+            </div>
+
+            <!-- PlotVote IF -->
+            <div class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl shadow-lg p-8 border-2 border-indigo-700 text-white">
+                <h3 class="text-2xl font-bold mb-4 flex items-center">
+                    <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    PlotVote Interactive Fiction
+                </h3>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <span class="text-indigo-200 mr-2">✓</span>
+                        <strong>Community votes democratically on all choices</strong>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-200 mr-2">✓</span>
+                        <strong>AI generates unique branches based on votes</strong>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-200 mr-2">✓</span>
+                        <strong>Unlimited branching possibilities</strong>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-200 mr-2">✓</span>
+                        <strong>Dynamic narratives that adapt in real-time</strong>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="text-indigo-200 mr-2">✓</span>
+                        <strong>Social, communal storytelling experience</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Process Steps -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-indigo-600">
+                <div class="text-4xl font-bold text-indigo-600 mb-4">01</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Story Reaches Choice Point</h3>
+                <p class="text-gray-600">
+                    As <strong>interactive stories</strong> develop, they naturally reach decision points where
+                    characters must make meaningful choices.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-purple-600">
+                <div class="text-4xl font-bold text-purple-600 mb-4">02</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Community Proposes Options</h3>
+                <p class="text-gray-600">
+                    Members submit possible plot directions, creating diverse <strong>branching narrative</strong>
+                    possibilities for the story to explore.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-pink-600">
+                <div class="text-4xl font-bold text-pink-600 mb-4">03</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">Democratic Voting Decides</h3>
+                <p class="text-gray-600">
+                    The community votes on preferred options. The winning choice determines the <strong>interactive
+                    fiction</strong> direction, reflecting collective preferences.
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-600">
+                <div class="text-4xl font-bold text-blue-600 mb-4">04</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">AI Creates the Branch</h3>
+                <p class="text-gray-600">
+                    Our AI generates a complete chapter following the chosen path, creating unique <strong>choice-driven
+                    stories</strong> that adapt to community decisions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits of Interactive Fiction -->
+    <section class="mb-16 bg-gray-50 rounded-2xl p-8 md:p-12">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">Why Interactive Fiction Captivates Readers</h2>
+
+        <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Active Engagement</h3>
+                    <p class="text-gray-600">
+                        <strong>Interactive stories</strong> transform passive readers into active participants,
+                        creating deeper emotional investment and memorable experiences.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Replayability & Discovery</h3>
+                    <p class="text-gray-600">
+                        <strong>Branching narratives</strong> create multiple story paths to explore, encouraging
+                        repeated engagement and discovery of alternate outcomes.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Community Social Experience</h3>
+                    <p class="text-gray-600">
+                        <strong>Choice-driven stories</strong> on PlotVote foster discussion, debate, and shared
+                        experiences as communities collectively navigate narratives.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Meaningful Consequences</h3>
+                    <p class="text-gray-600">
+                        <strong>Interactive fiction</strong> creates stakes where choices matter, producing narrative
+                        consequences that make stories feel dynamic and responsive.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Personalized Storytelling</h3>
+                    <p class="text-gray-600">
+                        Each community creates unique story paths in our <strong>interactive narrative</strong>
+                        platform, making every experience genuinely distinctive.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
+                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Immersive World-Building</h3>
+                    <p class="text-gray-600">
+                        <strong>Choice-based fiction</strong> enables deeper world exploration as readers actively
+                        investigate different narrative possibilities and story corners.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genre Showcase -->
+    <section class="mb-16">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-6">Interactive Fiction Across All Genres</h2>
+        <p class="text-xl text-gray-600 text-center max-w-3xl mx-auto mb-12">
+            <strong>Interactive stories</strong> enhance every genre with community-driven choices and branching paths
+        </p>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl p-6 text-white">
+                <h3 class="text-2xl font-bold mb-3">Fantasy Adventures</h3>
+                <p class="text-purple-100">
+                    Choose character abilities, navigate moral dilemmas, and determine the fate of kingdoms in
+                    community-driven <strong>interactive fiction</strong> quests.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl p-6 text-white">
+                <h3 class="text-2xl font-bold mb-3">Sci-Fi Exploration</h3>
+                <p class="text-blue-100">
+                    Vote on first contact protocols, planetary exploration decisions, and technology choices in
+                    <strong>branching narrative</strong> space operas.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-red-600 to-orange-600 rounded-xl p-6 text-white">
+                <h3 class="text-2xl font-bold mb-3">Mystery Investigation</h3>
+                <p class="text-red-100">
+                    Collectively decide which clues to pursue, suspects to interview, and theories to investigate
+                    in <strong>choice-driven detective stories</strong>.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-600 to-teal-600 rounded-xl p-6 text-white">
+                <h3 class="text-2xl font-bold mb-3">Horror Survival</h3>
+                <p class="text-green-100">
+                    Make life-or-death decisions as a community, determining who survives in terrifying
+                    <strong>interactive horror fiction</strong> experiences.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-pink-600 to-rose-600 rounded-xl p-6 text-white">
+                <h3 class="text-2xl font-bold mb-3">Romance Drama</h3>
+                <p class="text-pink-100">
+                    Guide relationship choices, navigate conflicts, and determine romantic outcomes in
+                    <strong>interactive romance stories</strong> shaped by community votes.
+                </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-yellow-600 to-amber-600 rounded-xl p-6 text-white">
+                <h3 class="text-2xl font-bold mb-3">Thriller Suspense</h3>
+                <p class="text-yellow-100">
+                    Vote on high-stakes decisions, escape scenarios, and plot revelations in pulse-pounding
+                    <strong>interactive thriller narratives</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Fiction History -->
+    <section class="mb-16 bg-white rounded-2xl p-8 md:p-12 shadow-lg">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-8">
+            The Evolution of Interactive Fiction
+        </h2>
+
+        <div class="max-w-4xl mx-auto space-y-6">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-16 text-2xl font-bold text-indigo-600 mr-4">1970s</div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Text-Based Adventures</h3>
+                    <p class="text-gray-600">
+                        Early computer games like Zork pioneered <strong>interactive narratives</strong> through
+                        text parser commands, establishing IF as a distinct medium.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-16 text-2xl font-bold text-purple-600 mr-4">1980s</div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Choose Your Own Adventure Books</h3>
+                    <p class="text-gray-600">
+                        Print <strong>interactive fiction</strong> reached mainstream audiences, introducing millions
+                        to <strong>choice-based storytelling</strong> through numbered page selections.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-16 text-2xl font-bold text-pink-600 mr-4">2000s</div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Digital Interactive Fiction Renaissance</h3>
+                    <p class="text-gray-600">
+                        Platforms like Twine democratized <strong>interactive story</strong> creation, enabling
+                        authors without programming skills to craft <strong>branching narratives</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start">
+                <div class="flex-shrink-0 w-16 text-2xl font-bold text-blue-600 mr-4">2010s</div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">Mobile & Gaming Integration</h3>
+                    <p class="text-gray-600">
+                        Apps and games brought <strong>interactive fiction</strong> to mobile devices, while titles
+                        like Telltale Games proved commercial viability of choice-driven narratives.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-start bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-lg border-l-4 border-indigo-600">
+                <div class="flex-shrink-0 w-16 text-2xl font-bold text-indigo-600 mr-4">2020s</div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">AI-Powered Community Interactive Fiction</h3>
+                    <p class="text-gray-700">
+                        <strong>PlotVote represents the next evolution:</strong> combining AI generation with
+                        democratic community voting to create unlimited <strong>interactive stories</strong> that
+                        reflect collective creativity rather than predetermined paths.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-16 bg-gray-50 rounded-2xl p-8 md:p-12">
+        <h2 class="text-4xl font-bold text-center text-gray-900 mb-12">
+            Interactive Fiction FAQ
+        </h2>
+
+        <div class="max-w-4xl mx-auto space-y-6" itemscope itemtype="https://schema.org/FAQPage">
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    How does interactive fiction differ from regular fiction?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            <strong>Interactive fiction</strong> allows readers to influence story outcomes through
+                            choices and decisions, whereas regular fiction presents a fixed narrative. In <strong>interactive
+                            stories</strong>, readers become active participants who determine character actions, plot
+                            directions, and story endings. This creates a personalized experience where each reader's
+                            journey can differ significantly. PlotVote extends this further by making choices collective—entire
+                            communities vote on <strong>branching narrative</strong> directions, creating unique democratic
+                            storytelling experiences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    Do I need programming skills to participate in interactive fiction on PlotVote?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            No programming or technical skills required! PlotVote makes <strong>choice-driven storytelling</strong>
+                            accessible to everyone. Simply read the story, propose plot options in plain language, and vote
+                            on your preferred directions. Our AI handles all the technical complexity of generating
+                            <strong>interactive narrative</strong> content. Whether you're a reader who loves stories or
+                            an aspiring creator, you can fully participate in crafting <strong>interactive fiction</strong>
+                            without any coding knowledge.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-b border-gray-200 pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    Can interactive fiction stories have satisfying endings despite branching paths?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            Absolutely! Well-crafted <strong>interactive fiction</strong> creates satisfying conclusions
+                            regardless of the path taken. Our AI analyzes the entire story arc to ensure each
+                            <strong>branching narrative</strong> leads to thematically appropriate, emotionally resonant
+                            endings. The community voting process naturally guides stories toward coherent resolutions,
+                            and our system provides guidance about plot options that might create narrative dead-ends.
+                            Many readers find <strong>choice-driven stories</strong> more satisfying than traditional
+                            fiction precisely because they've actively shaped the outcome.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pb-6" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="text-xl font-bold text-gray-900 mb-3" itemprop="name">
+                    What genres work best for interactive fiction?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text" class="text-gray-700">
+                        <p>
+                            <strong>Interactive stories</strong> enhance virtually every genre, though some particularly
+                            thrive with choice-driven narratives. <strong>Fantasy and sci-fi</strong> excel due to
+                            world-building possibilities and exploration choices. <strong>Mystery and thriller</strong>
+                            benefit from investigation decisions and suspenseful branching. <strong>Horror</strong> creates
+                            intense experiences with survival choices. <strong>Romance</strong> leverages relationship
+                            decisions and character interactions. Even <strong>literary fiction</strong> works well when
+                            exploring philosophical choices and character development. PlotVote's community voting system
+                            makes all genres viable for <strong>interactive fiction</strong> creation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-8 md:p-12 text-center text-white">
+        <h2 class="text-4xl font-bold mb-4">Start Your Interactive Fiction Journey</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+            Experience <strong>interactive stories</strong> where communities vote on every plot twist.
+            Join thousands creating <strong>choice-driven narratives</strong> powered by AI and collective imagination.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'stories:homepage' %}" class="inline-block bg-white text-indigo-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition">
+                Explore Interactive Stories
+            </a>
+            <a href="{% url 'stories:create_story_pitch' %}" class="inline-block bg-indigo-700 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-indigo-800 transition border-2 border-white">
+                Create Your Own
+            </a>
+        </div>
+    </section>
+
+    <!-- Internal Links Section -->
+    <section class="mt-16 pt-8 border-t border-gray-200">
+        <div class="grid md:grid-cols-3 gap-6 text-center">
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Technology</h3>
+                <a href="/ai-storytelling/" class="text-indigo-600 hover:text-indigo-800">
+                    AI Storytelling →
+                </a>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Community Approach</h3>
+                <a href="/crowdsourced-storytelling/" class="text-indigo-600 hover:text-indigo-800">
+                    Crowdsourced Storytelling →
+                </a>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Get Started</h3>
+                <a href="/how-it-works/" class="text-indigo-600 hover:text-indigo-800">
+                    How It Works →
+                </a>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

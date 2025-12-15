@@ -9,6 +9,13 @@ app_name = 'stories'
 urlpatterns = [
     # Homepage and collaborative stories
     path('', views.homepage, name='homepage'),
+
+    # SEO Landing Pages
+    path('ai-storytelling/', views.ai_storytelling, name='ai_storytelling'),
+    path('crowdsourced-storytelling/', views.crowdsourced_storytelling, name='crowdsourced_storytelling'),
+    path('interactive-fiction/', views.interactive_fiction, name='interactive_fiction'),
+    path('how-it-works/', views.how_it_works, name='how_it_works'),
+
     path('create-story/', views.create_story_pitch, name='create_story_pitch'),
     path('story/<slug:slug>/', views.story_detail, name='story_detail'),
     path('story/<slug:slug>/chapter/<int:chapter_number>/', views.chapter_detail, name='chapter_detail'),
